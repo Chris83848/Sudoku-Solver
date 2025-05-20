@@ -11,19 +11,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     @Override
-    public void start(Stage home) {
-        Button loadButton = new Button("Solve Own Puzzle");
-        Button generateButton = new Button("Solve Random Puzzle");
+    public void start(Stage primary) {
+        primary.setTitle("Sudoku Solver");
 
-        VBox layout = new VBox(20, loadButton, generateButton);
-        layout.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(layout, 400, 300);
+        HomeScreen homeScreen = new HomeScreen();
 
-        home.setScene(scene);
-        home.setTitle("Sudoku Solver");
-        home.setMaximized(true);
-        home.show();
-
+        primary.setScene(homeScreen.getScene(primary));
+        primary.setMaximized(true);
+        primary.show();
     }
 
     public static void main(String[] args) {
