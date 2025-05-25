@@ -18,7 +18,7 @@ public class SudokuBoard {
     }
 
     public static boolean isSolvable() {
-        return SudokuSolverApplication.boardHumanlySolvable(board, 3);
+        return (SudokuSolverApplication.boardHumanlySolvable(board, 3) && SudokuBoardGenerator.isUnique(board));
     }
 
     public static boolean isCorrect() {
@@ -33,6 +33,7 @@ public class SudokuBoard {
         }
         return true;
     }
+
 
     @Override
     public String toString() {
