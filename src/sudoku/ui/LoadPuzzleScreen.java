@@ -9,12 +9,15 @@ import javafx.stage.Stage;
 
 public class LoadPuzzleScreen {
     public Scene getScene(Stage load) {
+
+        // Create pane for the sudoku board, including size and style
         GridPane board = new GridPane();
         board.setAlignment(Pos.CENTER);
         board.setHgap(0);
         board.setVgap(0);
         board.setStyle("-fx-background-color: white;");
 
+        // Create cells for the 81 sudoku squares on the board, setting size and style
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Label cell = new Label();
@@ -28,11 +31,13 @@ public class LoadPuzzleScreen {
             }
         }
 
+        // Set layout and return screen
         VBox layout = new VBox(20, board);
         layout.setAlignment(Pos.CENTER);
         return new Scene(layout, 800, 600);
     }
 
+    // Determines which cells need highlighted borders to emphasize subgrids
     private String getBorderWidth(int row, int column) {
         int top = (row % 3 == 0) ? 3 : 1;
         int right = (column == 8) ? 3 : 1;

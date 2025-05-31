@@ -14,8 +14,10 @@ public class Main extends Application {
     public void start(Stage primary) {
         primary.setTitle("Sudoku Solver");
 
+        // Create home screen of program
         HomeScreen homeScreen = new HomeScreen();
 
+        // Call home screen and show it
         primary.setScene(homeScreen.getScene(primary));
         primary.setMaximized(true);
         primary.show();
