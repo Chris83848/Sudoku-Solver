@@ -3,6 +3,7 @@ package sudoku.ui;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -15,7 +16,7 @@ public class LoadPuzzleScreen {
 
     public Scene getScene(Stage load) {
 
-        // Create pane for the sudoku board, including size and style
+        // Create grid pane for the sudoku board, including size and style
         GridPane board = new GridPane();
         board.setAlignment(Pos.CENTER);
         board.setHgap(0);
@@ -64,8 +65,33 @@ public class LoadPuzzleScreen {
             }
         }
 
+        // Create grid pane for number pad
+        GridPane numberPad = new GridPane();
+        numberPad.setAlignment(Pos.CENTER);
+        numberPad.setHgap(10);
+        numberPad.setVgap(10);
+
+        // Create buttons for numbers 1-9 and for number pad
+        for (int num = 1; num <= 9; num++) {
+            // Create button
+            Button numButton = new Button(String.valueOf(num));
+            numButton.setPrefSize(60, 60);
+            numButton.setStyle("-fx-font-size: 18;");
+
+            // Determine coordinates for number pad
+            int row = (num <= 5) ? 0 : 1;
+            int column = (num <= 5) ? (num - 1) : (num - 6);
+            numberPad.add(numButton, column, row);
+        }
+
+        // Create clear button and add to last slot in number pad
+        Button clearButton = new Button("X");
+        clearButton.setPrefSize(60, 60);
+        clearButton.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
+        numberPad.add(clearButton, 4, 1);
+
         // Set layout and return screen
-        VBox layout = new VBox(20, board);
+        VBox layout = new VBox(20, board, numberPad);
         layout.setAlignment(Pos.CENTER);
         return new Scene(layout, 800, 600);
     }
