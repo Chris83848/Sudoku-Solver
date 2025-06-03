@@ -5,6 +5,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,15 @@ public class LoadPuzzleScreen {
     private Pane selectedCell = null;
 
     public Scene getScene(Stage load) {
+
+        Label title = new Label("Input Your Puzzle Below");
+        title.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        Button backButton = new Button("Back");
+        backButton.setStyle("-fx-font-size: 14;");
+        backButton.setOnAction(e -> {
+            load.setScene(new HomeScreen().getScene(load));
+        });
 
         // Create grid pane for the sudoku board, including size and style
         GridPane board = new GridPane();
@@ -113,9 +123,16 @@ public class LoadPuzzleScreen {
         numberPad.add(clearButton, 4, 1);
 
         // Set layout and return screen
-        VBox layout = new VBox(20, board, numberPad);
-        layout.setAlignment(Pos.CENTER);
-        return new Scene(layout, 800, 600);
+        VBox coreLayout = new VBox(20, title, board, numberPad);
+        coreLayout.setAlignment(Pos.CENTER);
+
+        BorderPane overallLayout = new BorderPane();
+        overallLayout.setTop(backButton);
+        overallLayout.setCenter(coreLayout);
+        BorderPane.setAlignment(backButton, Pos.TOP_LEFT);
+        BorderPane.setMargin(backButton, new javafx.geometry.Insets(10));
+
+        return new Scene(overallLayout, 800, 600);
     }
 
     // Determines which cells need highlighted borders to emphasize subgrids
