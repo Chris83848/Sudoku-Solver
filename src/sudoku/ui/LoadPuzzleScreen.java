@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -81,6 +82,20 @@ public class LoadPuzzleScreen {
             // Determine coordinates for number pad
             int row = (num <= 5) ? 0 : 1;
             int column = (num <= 5) ? (num - 1) : (num - 6);
+
+            numButton.setOnAction(e -> {
+                if (selectedCell != null) {
+                    selectedCell.getChildren().clear();
+
+                    Label numInput = new Label(numButton.getText());
+                    numInput.setStyle("-fx-font-size: 20;");
+                    numInput.setAlignment(Pos.CENTER);
+                    numInput.setPrefSize(60, 60);
+
+                    selectedCell.getChildren().add(numInput);
+                }
+            });
+
             numberPad.add(numButton, column, row);
         }
 
@@ -88,6 +103,13 @@ public class LoadPuzzleScreen {
         Button clearButton = new Button("X");
         clearButton.setPrefSize(60, 60);
         clearButton.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
+
+        clearButton.setOnAction(e -> {
+            if (selectedCell != null) {
+                selectedCell.getChildren().clear();
+            }
+        });
+
         numberPad.add(clearButton, 4, 1);
 
         // Set layout and return screen
