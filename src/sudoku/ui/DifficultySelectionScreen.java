@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sudoku.logic.SudokuBoardGenerator;
 
 public class DifficultySelectionScreen {
 
@@ -20,12 +21,16 @@ public class DifficultySelectionScreen {
 
         //
         easyButton.setOnAction(e -> {
-
+            int[][] easyPuzzle = SudokuBoardGenerator.generateEasyBoardPuzzle();
+            SolvingScreen solvingScreen = new SolvingScreen();
+            difficulties.setScene(solvingScreen.getScene(difficulties, easyPuzzle));
         });
 
         //
         mediumButton.setOnAction(e -> {
-
+            int[][] mediumPuzzle = SudokuBoardGenerator.generateMediumBoardPuzzle();
+            SolvingScreen solvingScreen = new SolvingScreen();
+            difficulties.setScene(solvingScreen.getScene(difficulties, mediumPuzzle));
         });
 
         // Call previous screen (home screen) when back button is clicked
