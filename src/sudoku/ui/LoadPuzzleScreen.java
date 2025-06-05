@@ -1,14 +1,12 @@
 package sudoku.ui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class LoadPuzzleScreen {
@@ -20,12 +18,16 @@ public class LoadPuzzleScreen {
 
         Label title = new Label("Input Your Puzzle Below");
         title.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+        title.setAlignment(Pos.CENTER);
 
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-font-size: 14;");
         backButton.setOnAction(e -> {
             load.setScene(new HomeScreen().getScene(load));
         });
+
+        Button submitButton = new Button("Submit");
+        submitButton.setPrefSize(80, 40);
 
         // Create grid pane for the sudoku board, including size and style
         GridPane board = new GridPane();
@@ -122,10 +124,13 @@ public class LoadPuzzleScreen {
 
         numberPad.add(clearButton, 4, 1);
 
-        // Set layout and return screen
-        VBox coreLayout = new VBox(20, title, board, numberPad);
-        coreLayout.setAlignment(Pos.CENTER);
+        HBox middleLayout = new HBox(20, board, submitButton);
+        middleLayout.setAlignment(Pos.CENTER);
+        middleLayout.setPadding(new Insets(0, 0, 0, 100));
 
+        // Set layout and return screen
+        VBox coreLayout = new VBox(20, title, middleLayout, numberPad);
+        coreLayout.setAlignment(Pos.CENTER);
         BorderPane overallLayout = new BorderPane();
         overallLayout.setTop(backButton);
         overallLayout.setCenter(coreLayout);
