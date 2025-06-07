@@ -4,10 +4,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import sudoku.logic.SudokuBoard;
+import sudoku.logic.SudokuBoardGenerator;
 
 public class LoadPuzzleScreen {
 
@@ -125,6 +128,28 @@ public class LoadPuzzleScreen {
         });
 
         numberPad.add(clearButton, 4, 1);
+
+        submitButton.setOnAction(e -> {
+            int[][] userPuzzle = new int[9][9];
+            for (int i = 0; i < cells.length; i++) {
+                for (int j = 0; j < cells.length; j++) {
+                    if (cells[i][j].getChildren().isEmpty()) {
+                        userPuzzle[i][j] = 0;
+                    } else {
+                        userPuzzle[i][j] = Integer.parseInt(((Label) cells[i][j].getChildren().get(0)).getText());
+                    }
+                }
+            }
+
+            SudokuBoard d = new SudokuBoard(userPuzzle);
+            if (d.isValid()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null); // Optional: removes the header
+                alert.setContentText("Puzzle submitted successfully!");
+                alert.showAndWait(); // This blocks until the user closes it
+            }
+        });
 
         // Create layout containing only board and submit button in order to control centralization and padding
         HBox middleLayout = new HBox(20, board, submitButton);
