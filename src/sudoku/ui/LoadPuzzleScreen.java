@@ -95,12 +95,13 @@ public class LoadPuzzleScreen {
             int row = (num <= 5) ? 0 : 1;
             int column = (num <= 5) ? (num - 1) : (num - 6);
 
+            // Input number into highlighted square when button is clicked
             numButton.setOnAction(e -> {
                 if (selectedCell != null) {
                     selectedCell.getChildren().clear();
 
                     Label numInput = new Label(numButton.getText());
-                    numInput.setStyle("-fx-font-size: 20;");
+                    numInput.setStyle("-fx-font-size: 30;");
                     numInput.setAlignment(Pos.CENTER);
                     numInput.setPrefSize(60, 60);
 
@@ -116,6 +117,7 @@ public class LoadPuzzleScreen {
         clearButton.setPrefSize(60, 60);
         clearButton.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
 
+        // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
             if (selectedCell != null) {
                 selectedCell.getChildren().clear();
@@ -124,11 +126,12 @@ public class LoadPuzzleScreen {
 
         numberPad.add(clearButton, 4, 1);
 
+        // Create layout containing only board and submit button in order to control centralization and padding
         HBox middleLayout = new HBox(20, board, submitButton);
         middleLayout.setAlignment(Pos.CENTER);
         middleLayout.setPadding(new Insets(0, 0, 0, 100));
 
-        // Set layout and return screen
+        // Set whole layout and return screen
         VBox coreLayout = new VBox(20, title, middleLayout, numberPad);
         coreLayout.setAlignment(Pos.CENTER);
         BorderPane overallLayout = new BorderPane();
