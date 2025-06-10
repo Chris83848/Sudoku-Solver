@@ -19,10 +19,12 @@ public class LoadPuzzleScreen {
 
     public Scene getScene(Stage load) {
 
+        // Create title of screen
         Label title = new Label("Input Your Puzzle Below");
         title.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
         title.setAlignment(Pos.CENTER);
 
+        // Create back button to go back to home screen
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-font-size: 14;");
         backButton.setOnAction(e -> {
@@ -129,25 +131,42 @@ public class LoadPuzzleScreen {
 
         numberPad.add(clearButton, 4, 1);
 
+        // When submit button is clicked, validate puzzle and move to solving screen if valid
         submitButton.setOnAction(e -> {
+
+            // Convert inputted puzzle into 2d array
             int[][] userPuzzle = new int[9][9];
             for (int i = 0; i < cells.length; i++) {
                 for (int j = 0; j < cells.length; j++) {
                     if (cells[i][j].getChildren().isEmpty()) {
                         userPuzzle[i][j] = 0;
                     } else {
-                        userPuzzle[i][j] = Integer.parseInt(((Label) cells[i][j].getChildren().get(0)).getText());
+                        Label value = (Label) cells[i][j].getChildren().get(0);
+                        userPuzzle[i][j] = Integer.parseInt(value.getText());
                     }
                 }
             }
 
-            SudokuBoard d = new SudokuBoard(userPuzzle);
-            if (d.isValid()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setHeaderText(null); // Optional: removes the header
-                alert.setContentText("Puzzle submitted successfully!");
-                alert.showAndWait(); // This blocks until the user closes it
+            // Create sudoku board class to validate
+            SudokuBoard userBoard = new SudokuBoard(userPuzzle);
+
+            // Prepare potential error message
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Invalid Puzzle");
+            errorAlert.setHeaderText(null);
+
+            // Check if the board breaks any sudoku rules and is solvable. If not, send to solving screen
+            if (!userBoard.isCorrect()) {
+                errorAlert.setContentText("The puzzle is not valid. Check for duplicate numbers in the same row, " +
+                        "column, or subgrid.");
+                errorAlert.showAndWait();
+            } else if (!userBoard.isSolvable()) {
+                errorAlert.setContentText("The puzzle is not solvable. It either is too difficult or has more " +
+                        "than one solution.");
+                errorAlert.showAndWait();
+            } else {
+                SolvingScreen solvingScreen = new SolvingScreen();
+                load.setScene(solvingScreen.getScene(load, userPuzzle));
             }
         });
 
