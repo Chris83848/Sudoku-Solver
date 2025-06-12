@@ -35,11 +35,7 @@ public class LoadPuzzleScreen {
         submitButton.setPrefSize(80, 40);
 
         // Create grid pane for the sudoku board, including size and style
-        GridPane board = new GridPane();
-        board.setAlignment(Pos.CENTER);
-        board.setHgap(0);
-        board.setVgap(0);
-        board.setStyle("-fx-background-color: white;");
+        GridPane board = UIComponents.createSudokuBoard();
 
         // Create cells for the 81 sudoku squares on the board, setting size and style
         for (int row = 0; row < 9; row++) {
@@ -47,7 +43,7 @@ public class LoadPuzzleScreen {
                 Pane cell = new Pane();
                 cell.setPrefSize(60, 60);
                 cell.setStyle("-fx-border-color: black;" +
-                        "-fx-border-width: " + getBorderWidth(row, column) + ";" +
+                        "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
                         "-fx-font-size: 20;" + "-fx-background-color: white; ");
                 cell.setCursor(Cursor.DEFAULT);
 
@@ -68,14 +64,14 @@ public class LoadPuzzleScreen {
 
                         // Unhighlight previous selected cell and set it back to normal using coordinates
                         selectedCell.setStyle("-fx-border-color: black;" +
-                                "-fx-border-width: " + getBorderWidth(previousRow, previousColumn) + ";" +
+                                "-fx-border-width: " + UIComponents.getBorderWidth(previousRow, previousColumn) + ";" +
                                 "-fx-font-size: 20;" + "-fx-background-color: white; ");
                     }
 
                     // Highlight current selected cell
                     selectedCell = cell;
                     cell.setStyle("-fx-border-color: black;" +
-                            "-fx-border-width: " + getBorderWidth(finalRow, finalColumn) + ";" +
+                            "-fx-border-width: " + UIComponents.getBorderWidth(finalRow, finalColumn) + ";" +
                             "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
                 });
 
@@ -185,14 +181,5 @@ public class LoadPuzzleScreen {
         BorderPane.setMargin(backButton, new javafx.geometry.Insets(10));
 
         return new Scene(overallLayout, 800, 600);
-    }
-
-    // Determines which cells need highlighted borders to emphasize subgrids
-    private String getBorderWidth(int row, int column) {
-        int top = (row % 3 == 0) ? 3 : 1;
-        int right = (column == 8) ? 3 : 1;
-        int bottom = (row == 8) ? 3 : 1;
-        int left = (column % 3 == 0) ? 3 : 1;
-        return top + " " + right + " " + bottom + " " + left;
     }
 }
