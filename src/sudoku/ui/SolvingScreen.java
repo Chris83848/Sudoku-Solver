@@ -26,18 +26,23 @@ public class SolvingScreen {
                 tempPuzzle[i][j] = puzzle[i][j];
             }
         }
-
         int[][] solvedPuzzle = SudokuSolverApplication.solveRecursively(tempPuzzle);
 
+        // Initialize basic board and number pad components
         GridPane board = UIComponents.createSudokuBoard();
         GridPane numberPad = UIComponents.createNumberPad();
 
+        // Loops through given puzzle and map to board UI
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 int value = puzzle[row][column];
+
+                // Lock cells that already have assigned values
                 if (value != 0) {
                     Label lockedCell = new Label(String.valueOf(value));
                     lockedCell.setStyle("-fx-font-size: 30;");
+
+                    // Put in wrapper to maintai board borders
                     StackPane wrapper = new StackPane(lockedCell);
                     wrapper.setPrefSize(60, 60);
                     wrapper.setStyle(
@@ -45,24 +50,27 @@ public class SolvingScreen {
                                     "-fx-border-color: black;" +
                                     "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";"
                     );
+                    cells[row][column] = wrapper;
                     board.add(wrapper, column, row);
 
                 } else {
+
+                    // Create panes for editable cells
                     Pane cell = new Pane();
                     cell.setPrefSize(60, 60);
                     cell.setStyle("-fx-background-color: white;" + "-fx-border-color: black;" +
                             "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";");
                     cells[row][column] = cell;
 
-
-
                     // Map coordinates to each cell
                     cell.setUserData(new int[]{row, column});
                     final int finalRow = row;
                     final int finalColumn = column;
 
+                    // Add highlighting feature to cells
                     cell.setOnMouseClicked(e -> {
                         if (selectedCell != null) {
+
                             // Gather coordinates of previous highlighted cell
                             int[] previousCoordinates = (int[]) selectedCell.getUserData();
                             int previousRow = previousCoordinates[0];
@@ -88,6 +96,7 @@ public class SolvingScreen {
 
         // Create buttons for numbers 1-9 and for number pad
         for (int num = 1; num <= 9; num++) {
+
             // Create button
             Button numButton = new Button(String.valueOf(num));
             numButton.setPrefSize(60, 60);
@@ -108,10 +117,9 @@ public class SolvingScreen {
                     numInput.setPrefSize(60, 60);
 
                     selectedCell.getChildren().add(numInput);
-                    System.out.println("test");
-                    //if (convert to 2d array puzzle) = solvedpuzzle trigger message
 
                     // Convert inputted puzzle into 2d array
+                    // CHECK CODE LATER
                     int[][] currentPuzzle = new int[9][9];
 
                     for (int i = 0; i < cells.length; i++) {
@@ -135,12 +143,10 @@ public class SolvingScreen {
                     }
 
 
-                    SudokuUtils.printBoard(currentPuzzle);
-                    SudokuUtils.printBoard(solvedPuzzle);
-
+                    // CLEAN UP AND OPTIMIZE
                     if (UIComponents.arraysAreEqual(currentPuzzle, solvedPuzzle)) {
                         System.out.println("Checking if puzzle is solved.");
-                        Alert success = new Alert(Alert.AlertType.ERROR);
+                        Alert success = new Alert(Alert.AlertType.INFORMATION);
                         success.setTitle("yay");
                         success.setHeaderText(null);
                         success.setContentText("You win");
@@ -163,16 +169,10 @@ public class SolvingScreen {
                 selectedCell.getChildren().clear();
             }
         });
-
         numberPad.add(clearButton, 4, 1);
-
-
-
 
         VBox layout = new VBox(20, board, numberPad);
         layout.setAlignment(Pos.CENTER);
         return new Scene(layout, 800, 600);
-
-
     }
 }
