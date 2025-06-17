@@ -11,7 +11,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sudoku.logic.SudokuSolverApplication;
-import sudoku.logic.SudokuUtils;
 
 public class SolvingScreen {
 
@@ -42,7 +41,7 @@ public class SolvingScreen {
                     Label lockedCell = new Label(String.valueOf(value));
                     lockedCell.setStyle("-fx-font-size: 30;");
 
-                    // Put in wrapper to maintai board borders
+                    // Put in wrapper to maintain board borders
                     StackPane wrapper = new StackPane(lockedCell);
                     wrapper.setPrefSize(60, 60);
                     wrapper.setStyle(
@@ -50,6 +49,7 @@ public class SolvingScreen {
                                     "-fx-border-color: black;" +
                                     "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";"
                     );
+                    wrapper.setUserData("locked");
                     cells[row][column] = wrapper;
                     board.add(wrapper, column, row);
 
@@ -60,6 +60,7 @@ public class SolvingScreen {
                     cell.setPrefSize(60, 60);
                     cell.setStyle("-fx-background-color: white;" + "-fx-border-color: black;" +
                             "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";");
+                    cell.setUserData("free");
                     cells[row][column] = cell;
 
                     // Map coordinates to each cell
@@ -71,15 +72,14 @@ public class SolvingScreen {
                     cell.setOnMouseClicked(e -> {
                         if (selectedCell != null) {
 
-                            // Gather coordinates of previous highlighted cell
-                            int[] previousCoordinates = (int[]) selectedCell.getUserData();
-                            int previousRow = previousCoordinates[0];
-                            int previousColumn = previousCoordinates[1];
-
                             // Unhighlight previous selected cell and set it back to normal using coordinates
-                            selectedCell.setStyle("-fx-border-color: black;" +
-                                    "-fx-border-width: " + UIComponents.getBorderWidth(previousRow, previousColumn) + ";" +
-                                    "-fx-font-size: 20;" + "-fx-background-color: white; ");
+                            for (int currentRow = 0; currentRow < 9; currentRow++) {
+                                for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
+                                    resetCellStyle(currentRow, currentColumn);
+                                }
+                            }
+
+
                         }
 
                         // Highlight current selected cell
@@ -175,4 +175,48 @@ public class SolvingScreen {
         layout.setAlignment(Pos.CENTER);
         return new Scene(layout, 800, 600);
     }
+
+
+    private void addVisibleHighlights(int x, int y) {
+
+        /*
+        for (int row = 0; row < 9; row++) {
+            resetCellStyle(row, previousColumn);
+        }
+
+        for (int column = 0; column < 9; column++) {
+            resetCellStyle(previousRow, column);
+        }
+
+        int rowStart = (previousRow / 3) * 3;
+        int columnStart = (previousColumn / 3) * 3;
+
+        for (int row = rowStart; row <= rowStart + 2; row++) {
+            for (int column = columnStart; column <= columnStart + 2; column++) {
+                resetCellStyle(row, column);
+            }
+        }
+
+         */
+    }
+
+
+    private void resetCellStyle(int row, int column) {
+        Pane cell = cells[row][column];
+
+        String backgroundColor = "white";
+        if (cell.getUserData() == "locked") {
+            backgroundColor = "#d3d3d3";
+        }
+
+        cell.setStyle("-fx-border-color: black;" +
+                "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
+                "-fx-font-size: 20;" +
+                "-fx-background-color: " + backgroundColor + ";");
+    }
+
+    // given a coordinate, highlight squares
+    // then just call method from when a cell is clicked and when a number is inserted/deleted
+
+
 }
