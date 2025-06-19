@@ -75,12 +75,7 @@ public class SolvingScreen {
                         }
 
                         selectedCell = cell;
-                        int cellValue = getCellValue(cell);
-                        if (cellValue < 1) {
-                            updateHighlights(cell, finalRow, finalColumn);
-                        } else {
-                            updateHighlights(cell, finalRow, finalColumn, cellValue);
-                        }
+                        updateHighlights(cell, finalRow, finalColumn);
                     });
                     board.add(cell, column, row);
                 }
@@ -172,19 +167,14 @@ public class SolvingScreen {
 
     private void updateHighlights(Pane cell, int currentRow, int currentColumn) {
         addVisibleHighlights(currentRow, currentColumn);
+        int cellValue = getCellValue(cell);
+        if (cellValue >= 1) {
+            highlightNumbers(cellValue);
+        }
         cell.setStyle("-fx-border-color: black;" +
                 "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
                 "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
     }
-
-    private void updateHighlights(Pane cell, int currentRow, int currentColumn, int num) {
-        addVisibleHighlights(currentRow, currentColumn);
-        highlightNumbers(num);
-        cell.setStyle("-fx-border-color: black;" +
-                "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
-                "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
-    }
-
 
     private void addVisibleHighlights(int currentRow, int currentColumn) {
 
