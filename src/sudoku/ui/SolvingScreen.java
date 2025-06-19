@@ -65,10 +65,10 @@ public class SolvingScreen {
 
                     // Map coordinates to each cell
                     cell.setUserData(new int[]{row, column});
-                    final int finalRow = row;
-                    final int finalColumn = column;
 
                     // Add highlighting feature to cells
+                    int finalRow = row;
+                    int finalColumn = column;
                     cell.setOnMouseClicked(e -> {
                         if (selectedCell != null) {
 
@@ -78,17 +78,21 @@ public class SolvingScreen {
                                     resetCellStyle(currentRow, currentColumn);
                                 }
                             }
-
-
                         }
 
                         // Highlight current selected cell
                         selectedCell = cell;
-                        cell.setStyle("-fx-border-color: black;" +
-                                "-fx-border-width: " + UIComponents.getBorderWidth(finalRow, finalColumn) + ";" +
-                                "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
-                    });
+                        addVisibleHighlights(finalRow, finalColumn);
 
+                        // Highlight same numbers
+                        int cellValue = getCellValue(cell);
+                        if (cellValue >= 1) {
+                            highlightNumbers(cellValue);
+                            cell.setStyle("-fx-border-color: black;" +
+                                    "-fx-border-width: " + UIComponents.getBorderWidth(finalRow, finalColumn) + ";" +
+                                    "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+                        }
+                    });
                     board.add(cell, column, row);
                 }
             }
@@ -177,27 +181,70 @@ public class SolvingScreen {
     }
 
 
-    private void addVisibleHighlights(int x, int y) {
+    private void addVisibleHighlights(int currentRow, int currentColumn) {
 
-        /*
         for (int row = 0; row < 9; row++) {
-            resetCellStyle(row, previousColumn);
+            Pane cell = cells[row][currentColumn];
+            cell.setStyle("-fx-border-color: black;" +
+                    "-fx-border-width: " + UIComponents.getBorderWidth(row, currentColumn) + ";" +
+                    "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
         }
 
         for (int column = 0; column < 9; column++) {
-            resetCellStyle(previousRow, column);
+            Pane cell = cells[currentRow][column];
+            cell.setStyle("-fx-border-color: black;" +
+                    "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, column) + ";" +
+                    "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
         }
 
-        int rowStart = (previousRow / 3) * 3;
-        int columnStart = (previousColumn / 3) * 3;
+        int rowStart = (currentRow / 3) * 3;
+        int columnStart = (currentColumn / 3) * 3;
 
         for (int row = rowStart; row <= rowStart + 2; row++) {
             for (int column = columnStart; column <= columnStart + 2; column++) {
-                resetCellStyle(row, column);
+                Pane cell = cells[row][column];
+                cell.setStyle("-fx-border-color: black;" +
+                        "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
+                        "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
             }
         }
 
-         */
+        Pane cell = cells[currentRow][currentColumn];
+        cell.setStyle("-fx-border-color: black;" +
+                "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
+                "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+
+    }
+
+    private void highlightNumbers(int num) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Pane cell = cells[row][column];
+                int value = getCellValue(cell);
+                if (value == num) {
+                    cell.setStyle("-fx-border-color: black;" +
+                            "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
+                            "-fx-font-size: 20;" + "-fx-background-color: #7CD6F5; ");
+                }
+            }
+        }
+    }
+
+    private int getCellValue(Pane cell) {
+        int cellValue = -1;
+        if (!cell.getChildren().isEmpty() && cell.getChildren().get(0) instanceof Label) {
+            Label label = (Label) cell.getChildren().get(0);
+            String text = label.getText();
+
+            if (!text.isEmpty()) {
+                try {
+                    cellValue = Integer.parseInt(text);
+                } catch (NumberFormatException e) {
+
+                }
+            }
+        }
+        return cellValue;
     }
 
 
