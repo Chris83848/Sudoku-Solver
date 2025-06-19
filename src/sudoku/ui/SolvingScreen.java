@@ -71,26 +71,15 @@ public class SolvingScreen {
                     int finalColumn = column;
                     cell.setOnMouseClicked(e -> {
                         if (selectedCell != null) {
-
-                            // Unhighlight previous selected cell and set it back to normal using coordinates
-                            for (int currentRow = 0; currentRow < 9; currentRow++) {
-                                for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
-                                    resetCellStyle(currentRow, currentColumn);
-                                }
-                            }
+                            resetCells();
                         }
 
-                        // Highlight current selected cell
                         selectedCell = cell;
-                        addVisibleHighlights(finalRow, finalColumn);
-
-                        // Highlight same numbers
                         int cellValue = getCellValue(cell);
-                        if (cellValue >= 1) {
-                            highlightNumbers(cellValue);
-                            cell.setStyle("-fx-border-color: black;" +
-                                    "-fx-border-width: " + UIComponents.getBorderWidth(finalRow, finalColumn) + ";" +
-                                    "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+                        if (cellValue < 1) {
+                            updateHighlights(cell, finalRow, finalColumn);
+                        } else {
+                            updateHighlights(cell, finalRow, finalColumn, cellValue);
                         }
                     });
                     board.add(cell, column, row);
@@ -181,6 +170,22 @@ public class SolvingScreen {
     }
 
 
+    private void updateHighlights(Pane cell, int currentRow, int currentColumn) {
+        addVisibleHighlights(currentRow, currentColumn);
+        cell.setStyle("-fx-border-color: black;" +
+                "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
+                "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+    }
+
+    private void updateHighlights(Pane cell, int currentRow, int currentColumn, int num) {
+        addVisibleHighlights(currentRow, currentColumn);
+        highlightNumbers(num);
+        cell.setStyle("-fx-border-color: black;" +
+                "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
+                "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+    }
+
+
     private void addVisibleHighlights(int currentRow, int currentColumn) {
 
         for (int row = 0; row < 9; row++) {
@@ -208,11 +213,6 @@ public class SolvingScreen {
                         "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
             }
         }
-
-        Pane cell = cells[currentRow][currentColumn];
-        cell.setStyle("-fx-border-color: black;" +
-                "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
-                "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
 
     }
 
@@ -260,6 +260,15 @@ public class SolvingScreen {
                 "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
                 "-fx-font-size: 20;" +
                 "-fx-background-color: " + backgroundColor + ";");
+    }
+
+    private void resetCells() {
+        // Unhighlight previous selected cell and set it back to normal using coordinates
+        for (int currentRow = 0; currentRow < 9; currentRow++) {
+            for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
+                resetCellStyle(currentRow, currentColumn);
+            }
+        }
     }
 
     // given a coordinate, highlight squares
