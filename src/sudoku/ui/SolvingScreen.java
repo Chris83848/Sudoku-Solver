@@ -118,7 +118,7 @@ public class SolvingScreen {
 
                     selectedCell.getChildren().add(numInput);
                     highlightNumbers(finalNum);
-                    int[] coords = (int[]) selectedCell.getUserData();
+                    int[] coords = findCellCoordinates(selectedCell);
                     int currentRow = coords[0];
                     int currentColumn = coords[1];
 
@@ -174,7 +174,13 @@ public class SolvingScreen {
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
             if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
+                int numToDelete = getCellValue(selectedCell);
+                unhighlightNumbers(numToDelete);
                 selectedCell.getChildren().clear();
+                int[] coords = findCellCoordinates(selectedCell);
+                selectedCell.setStyle("-fx-border-color: black;" +
+                        "-fx-border-width: " + UIComponents.getBorderWidth(coords[0], coords[1]) + ";" +
+                        "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
             }
         });
         numberPad.add(clearButton, 4, 1);
@@ -279,6 +285,28 @@ public class SolvingScreen {
                 resetCellStyle(currentRow, currentColumn);
             }
         }
+    }
+
+    private void unhighlightNumbers(int num) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Pane cell = cells[row][column];
+                int value = getCellValue(cell);
+                if (value == num) {
+                    String backgroundColor = "white";
+                    if (cell.getUserData() == "locked") {
+                        backgroundColor = "#d3d3d3";
+                    }
+                    cell.setStyle("-fx-border-color: black;" +
+                            "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
+                            "-fx-font-size: 20;" + "-fx-background-color: " + backgroundColor + "; ");
+                }
+            }
+        }
+    }
+
+    private int[] findCellCoordinates(Pane cell) {
+        return (int[]) cell.getUserData();
     }
 
     // given a coordinate, highlight squares
