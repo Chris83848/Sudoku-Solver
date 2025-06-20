@@ -105,8 +105,10 @@ public class SolvingScreen {
             int column = (num <= 5) ? (num - 1) : (num - 6);
 
             // Input number into highlighted square when button is clicked
+            int finalNum = num;
             numButton.setOnAction(e -> {
-                if (selectedCell != null) {
+                if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
+
                     selectedCell.getChildren().clear();
 
                     Label numInput = new Label(numButton.getText());
@@ -115,6 +117,14 @@ public class SolvingScreen {
                     numInput.setPrefSize(60, 60);
 
                     selectedCell.getChildren().add(numInput);
+                    highlightNumbers(finalNum);
+                    int[] coords = (int[]) selectedCell.getUserData();
+                    int currentRow = coords[0];
+                    int currentColumn = coords[1];
+
+                    selectedCell.setStyle("-fx-border-color: black;" +
+                            "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
+                            "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
 
                     // Convert inputted puzzle into 2d array
                     // CHECK CODE LATER
@@ -163,7 +173,7 @@ public class SolvingScreen {
 
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
-            if (selectedCell != null) {
+            if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
                 selectedCell.getChildren().clear();
             }
         });
