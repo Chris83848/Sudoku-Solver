@@ -50,6 +50,16 @@ public class SolvingScreen {
                                     "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";"
                     );
                     wrapper.setUserData("locked");
+                    int finalRow1 = row;
+                    int finalColumn1 = column;
+                    wrapper.setOnMouseClicked(e -> {
+                        if (selectedCell != null) {
+                            resetCells();
+                        }
+
+                        selectedCell = wrapper;
+                        updateHighlights(wrapper, finalRow1, finalColumn1);
+                    });
                     cells[row][column] = wrapper;
                     board.add(wrapper, column, row);
 
