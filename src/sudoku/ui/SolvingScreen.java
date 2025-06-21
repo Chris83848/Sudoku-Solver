@@ -174,10 +174,10 @@ public class SolvingScreen {
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
             if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
-                int numToDelete = getCellValue(selectedCell);
-                unhighlightNumbers(numToDelete);
-                selectedCell.getChildren().clear();
                 int[] coords = findCellCoordinates(selectedCell);
+                resetCells();
+                addVisibleHighlights(coords[0], coords[1]);
+                selectedCell.getChildren().clear();
                 selectedCell.setStyle("-fx-border-color: black;" +
                         "-fx-border-width: " + UIComponents.getBorderWidth(coords[0], coords[1]) + ";" +
                         "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
