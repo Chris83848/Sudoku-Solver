@@ -16,7 +16,7 @@ public class SolvingScreen {
 
     private Pane[][] cells = new Pane[9][9];
     private Pane selectedCell = null;
-    public Scene getScene(Stage solve, int[][] puzzle) {
+    public Scene getScene(Stage solve, int[][] puzzle, boolean custom) {
 
         // Make copy of puzzle to then make solved puzzle from it
         int[][] tempPuzzle = new int[9][9];
@@ -49,10 +49,17 @@ public class SolvingScreen {
                                     "-fx-border-color: black;" +
                                     "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";"
                     );
+
+                    // Tag cells as locked
                     wrapper.setUserData("locked");
+
                     int finalRow1 = row;
                     int finalColumn1 = column;
+
+                    // Update selected cell when clicked and adjust highlights accordingly
                     wrapper.setOnMouseClicked(e -> {
+
+                        // Reset cell styles
                         if (selectedCell != null) {
                             resetCells();
                         }
@@ -109,23 +116,26 @@ public class SolvingScreen {
             numButton.setOnAction(e -> {
                 if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
 
+                    // Clear cell
                     selectedCell.getChildren().clear();
 
+                    // Replace with new number
                     Label numInput = new Label(numButton.getText());
                     numInput.setStyle("-fx-font-size: 30;");
                     numInput.setAlignment(Pos.CENTER);
                     numInput.setPrefSize(60, 60);
 
+                    // Get coordinates and update highlights accordingly
                     int[] coords = findCellCoordinates(selectedCell);
                     int currentRow = coords[0];
                     int currentColumn = coords[1];
                     selectedCell.getChildren().add(numInput);
                     resetCells();
                     updateHighlights(selectedCell, currentRow, currentColumn);
-                    
+
 
                     // Convert inputted puzzle into 2d array
-                    // CHECK CODE LATER
+                    // CHECK CODE LATER and ask chatgpt
                     int[][] currentPuzzle = new int[9][9];
 
                     for (int i = 0; i < cells.length; i++) {
@@ -172,6 +182,8 @@ public class SolvingScreen {
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
             if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
+
+                // Find coordinates, update highlights, and clear cell
                 int[] coords = findCellCoordinates(selectedCell);
                 resetCells();
                 addVisibleHighlights(coords[0], coords[1]);
@@ -189,6 +201,7 @@ public class SolvingScreen {
     }
 
 
+    // Add visible highlights as well as number highlights if needed
     private void updateHighlights(Pane cell, int currentRow, int currentColumn) {
         addVisibleHighlights(currentRow, currentColumn);
         int cellValue = getCellValue(cell);
@@ -200,8 +213,10 @@ public class SolvingScreen {
                 "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
     }
 
+    // Highlight cells in the same row, column, or subgrid of given coordinates
     private void addVisibleHighlights(int currentRow, int currentColumn) {
 
+        // Highlight row
         for (int row = 0; row < 9; row++) {
             Pane cell = cells[row][currentColumn];
             cell.setStyle("-fx-border-color: black;" +
@@ -209,6 +224,7 @@ public class SolvingScreen {
                     "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
         }
 
+        // Highlight column
         for (int column = 0; column < 9; column++) {
             Pane cell = cells[currentRow][column];
             cell.setStyle("-fx-border-color: black;" +
@@ -216,6 +232,7 @@ public class SolvingScreen {
                     "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
         }
 
+        // Highlight subgrid
         int rowStart = (currentRow / 3) * 3;
         int columnStart = (currentColumn / 3) * 3;
 
@@ -230,7 +247,10 @@ public class SolvingScreen {
 
     }
 
+    // Highlight identical numbers in puzzle
     private void highlightNumbers(int num) {
+
+        // Loop through board and highlight the same numbers
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane cell = cells[row][column];
@@ -244,6 +264,7 @@ public class SolvingScreen {
         }
     }
 
+    // Return the value inside of a cell
     private int getCellValue(Pane cell) {
         int cellValue = -1;
         if (!cell.getChildren().isEmpty() && cell.getChildren().get(0) instanceof Label) {
@@ -261,7 +282,7 @@ public class SolvingScreen {
         return cellValue;
     }
 
-
+    // Set cell back to original highlights--white or grey depending on locked or not
     private void resetCellStyle(int row, int column) {
         Pane cell = cells[row][column];
 
@@ -276,8 +297,9 @@ public class SolvingScreen {
                 "-fx-background-color: " + backgroundColor + ";");
     }
 
+    // Reset styles of all cells in puzzle
     private void resetCells() {
-        // Unhighlight previous selected cell and set it back to normal using coordinates
+        // Unhighlight cell and set it back to normal using coordinates
         for (int currentRow = 0; currentRow < 9; currentRow++) {
             for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
                 resetCellStyle(currentRow, currentColumn);
@@ -303,6 +325,7 @@ public class SolvingScreen {
         }
     }
 
+    // Returns the coordinates of a cell
     private int[] findCellCoordinates(Pane cell) {
         return (int[]) cell.getUserData();
     }
