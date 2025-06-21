@@ -116,15 +116,13 @@ public class SolvingScreen {
                     numInput.setAlignment(Pos.CENTER);
                     numInput.setPrefSize(60, 60);
 
-                    selectedCell.getChildren().add(numInput);
-                    highlightNumbers(finalNum);
                     int[] coords = findCellCoordinates(selectedCell);
                     int currentRow = coords[0];
                     int currentColumn = coords[1];
-
-                    selectedCell.setStyle("-fx-border-color: black;" +
-                            "-fx-border-width: " + UIComponents.getBorderWidth(currentRow, currentColumn) + ";" +
-                            "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+                    selectedCell.getChildren().add(numInput);
+                    resetCells();
+                    updateHighlights(selectedCell, currentRow, currentColumn);
+                    
 
                     // Convert inputted puzzle into 2d array
                     // CHECK CODE LATER
