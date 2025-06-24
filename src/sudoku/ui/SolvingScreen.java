@@ -1,14 +1,12 @@
 package sudoku.ui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import sudoku.logic.SudokuSolverApplication;
 
@@ -195,8 +193,35 @@ public class SolvingScreen {
         });
         numberPad.add(clearButton, 4, 1);
 
-        VBox layout = new VBox(20, board, numberPad);
+
+        // Create column for extra buttons to go on
+        VBox buttonColumn = new VBox(10); // spacing of 10 between buttons
+        buttonColumn.setAlignment(Pos.TOP_CENTER); // align buttons to top-center
+
+        // Create check cell button and format
+        Button checkCell = new Button("Check Cell");
+        checkCell.setPrefSize(80, 40); // Small rectangular buttons
+        checkCell.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(checkCell);
+
+        //
+        checkCell.setOnAction(e -> {
+
+        });
+
+
+
+
+
+        // Format middle layout
+        HBox middleLayout = new HBox(30, board, buttonColumn);
+        middleLayout.setAlignment(Pos.CENTER);
+        middleLayout.setPadding(new Insets(0, 0, 0, 100));
+
+        // Wrap everything in vertical layout
+        VBox layout = new VBox(20, middleLayout, numberPad);
         layout.setAlignment(Pos.CENTER);
+
         return new Scene(layout, 800, 600);
     }
 
@@ -323,6 +348,10 @@ public class SolvingScreen {
                 }
             }
         }
+    }
+
+    private void checkCell(Pane cell) {
+        int[] coords = findCellCoordinates(cell);
     }
 
     // Returns the coordinates of a cell
