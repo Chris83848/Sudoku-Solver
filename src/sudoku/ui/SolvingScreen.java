@@ -10,6 +10,10 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import sudoku.logic.SudokuSolverApplication;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 public class SolvingScreen {
 
     private Pane[][] cells = new Pane[9][9];
@@ -36,11 +40,11 @@ public class SolvingScreen {
 
                 // Lock cells that already have assigned values
                 if (value != 0) {
-                    Label lockedCell = new Label(String.valueOf(value));
-                    lockedCell.setStyle("-fx-font-size: 30;");
+                    Label fixedCell = new Label(String.valueOf(value));
+                    fixedCell.setStyle("-fx-font-size: 30;");
 
                     // Put in wrapper to maintain board borders
-                    StackPane wrapper = new StackPane(lockedCell);
+                    StackPane wrapper = new StackPane(fixedCell);
                     wrapper.setPrefSize(60, 60);
                     wrapper.setStyle(
                             "-fx-background-color: #d3d3d3;" +
@@ -48,8 +52,12 @@ public class SolvingScreen {
                                     "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";"
                     );
 
-                    // Tag cells as locked
-                    wrapper.setUserData("locked");
+                    // Tag cells as fixed
+                    Map<String, Object> dataMap = new HashMap<>();
+                    dataMap.put("coords", new int[]{row, column});
+                    dataMap.put("type", "fixed");
+                    wrapper.setUserData(dataMap);
+
 
                     int finalRow1 = row;
                     int finalColumn1 = column;
@@ -75,11 +83,14 @@ public class SolvingScreen {
                     cell.setPrefSize(60, 60);
                     cell.setStyle("-fx-background-color: white;" + "-fx-border-color: black;" +
                             "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";");
-                    cell.setUserData("free");
-                    cells[row][column] = cell;
+
 
                     // Map coordinates to each cell
-                    cell.setUserData(new int[]{row, column});
+                    Map<String, Object> dataMap = new HashMap<>();
+                    dataMap.put("coords", new int[]{row, column});
+                    dataMap.put("type", "free");
+                    cell.setUserData(dataMap);
+
 
                     // Add highlighting feature to cells
                     int finalRow = row;
@@ -92,6 +103,7 @@ public class SolvingScreen {
                         selectedCell = cell;
                         updateHighlights(cell, finalRow, finalColumn);
                     });
+                    cells[row][column] = cell;
                     board.add(cell, column, row);
                 }
             }
@@ -112,7 +124,7 @@ public class SolvingScreen {
             // Input number into highlighted square when button is clicked
             int finalNum = num;
             numButton.setOnAction(e -> {
-                if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
+                if (selectedCell != null && findCellType(selectedCell).equals("free")) {
 
                     // Clear cell
                     selectedCell.getChildren().clear();
@@ -179,7 +191,7 @@ public class SolvingScreen {
 
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
-            if (selectedCell != null && !selectedCell.getUserData().equals("locked")) {
+            if (selectedCell != null && findCellType(selectedCell).equals("free")) {
 
                 // Find coordinates, update highlights, and clear cell
                 int[] coords = findCellCoordinates(selectedCell);
@@ -206,7 +218,7 @@ public class SolvingScreen {
 
         //
         checkCell.setOnAction(e -> {
-
+            checkCell(selectedCell, solvedPuzzle);
         });
 
 
@@ -307,12 +319,12 @@ public class SolvingScreen {
         return cellValue;
     }
 
-    // Set cell back to original highlights--white or grey depending on locked or not
+    // Set cell back to original highlights--white or grey depending on fixed or not
     private void resetCellStyle(int row, int column) {
         Pane cell = cells[row][column];
 
         String backgroundColor = "white";
-        if (cell.getUserData() == "locked") {
+        if (findCellType(cell).equals("fixed")) {
             backgroundColor = "#d3d3d3";
         }
 
@@ -332,31 +344,36 @@ public class SolvingScreen {
         }
     }
 
-    private void unhighlightNumbers(int num) {
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 9; column++) {
-                Pane cell = cells[row][column];
-                int value = getCellValue(cell);
-                if (value == num) {
-                    String backgroundColor = "white";
-                    if (cell.getUserData() == "locked") {
-                        backgroundColor = "#d3d3d3";
-                    }
-                    cell.setStyle("-fx-border-color: black;" +
-                            "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";" +
-                            "-fx-font-size: 20;" + "-fx-background-color: " + backgroundColor + "; ");
-                }
-            }
-        }
-    }
+    private void checkCell(Pane cell, int[][] solvedPuzzle) {
+        int[] cellCoords = findCellCoordinates(cell);
+        int cellValue = getCellValue(cell);
+        if (findCellType(cell).equals("free") && cellValue == solvedPuzzle[cellCoords[0]][cellCoords[1]]) {
+            Label value = (Label) cell.getChildren().get(0);
+            value.setStyle("-fx-text-fill: green;");
 
-    private void checkCell(Pane cell) {
-        int[] coords = findCellCoordinates(cell);
+
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("coords", findCellCoordinates(cell));
+            dataMap.put("type", "locked");
+            cell.setUserData(dataMap);
+        } else {
+
+        }
     }
 
     // Returns the coordinates of a cell
     private int[] findCellCoordinates(Pane cell) {
-        return (int[]) cell.getUserData();
+        Map<String, Object> dataMap = (Map<String, Object>) cell.getUserData();
+        int[] coords = (int[]) dataMap.get("coords");
+
+        return coords;
+    }
+
+    private String findCellType(Pane cell) {
+        Map<String, Object> dataMap = (Map<String, Object>) cell.getUserData();
+        String type = (String) dataMap.get("type");
+
+        return type;
     }
 
     // given a coordinate, highlight squares
