@@ -210,6 +210,9 @@ public class SolvingScreen {
         VBox buttonColumn = new VBox(10); // spacing of 10 between buttons
         buttonColumn.setAlignment(Pos.TOP_CENTER); // align buttons to top-center
 
+
+        // Put all into one method called button creation or something
+
         // Create check cell button and format
         Button checkCell = new Button("Check Cell");
         checkCell.setPrefSize(80, 40);
@@ -230,6 +233,17 @@ public class SolvingScreen {
         //
         checkPuzzle.setOnAction(e -> {
             checkPuzzle(solvedPuzzle);
+        });
+
+        // Create check puzzle button and format
+        Button revealCell = new Button("Reveal Cell");
+        revealCell.setPrefSize(80, 40);
+        revealCell.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(revealCell);
+
+        //
+        revealCell.setOnAction(e -> {
+            revealCell(selectedCell, solvedPuzzle);
         });
 
 
@@ -384,6 +398,26 @@ public class SolvingScreen {
                 checkCell(cell, solvedPuzzle);
             }
         }
+    }
+
+    private void revealCell(Pane cell, int[][] solvedBoard) {
+        if (findCellType(cell).equals("free")) {
+            int[] coords = findCellCoordinates(cell);
+            int numValue = solvedBoard[coords[0]][coords[1]];
+            String printValue = String.valueOf(numValue);
+            Label valueInput = new Label(printValue);
+            valueInput.setStyle("-fx-font-size: 30;" + "-fx-text-fill: green;");
+            valueInput.setAlignment(Pos.CENTER);
+            valueInput.setPrefSize(60, 60);
+            cell.getChildren().add(valueInput);
+
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("coords", findCellCoordinates(cell));
+            dataMap.put("type", "locked");
+            cell.setUserData(dataMap);
+        }
+
+        // Trigger check to see if puzzle is solved at the end
     }
 
     // Returns the coordinates of a cell
