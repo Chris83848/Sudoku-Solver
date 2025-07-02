@@ -246,6 +246,17 @@ public class SolvingScreen {
             revealCell(selectedCell, solvedPuzzle);
         });
 
+        // Create reveal puzzle button and format
+        Button revealPuzzle = new Button("Reveal Puzzle");
+        revealPuzzle.setPrefSize(80, 40);
+        revealPuzzle.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(revealPuzzle);
+
+        //
+        revealPuzzle.setOnAction(e -> {
+            revealPuzzle(solvedPuzzle);
+        });
+
 
 
 
@@ -418,6 +429,15 @@ public class SolvingScreen {
         }
 
         // Trigger check to see if puzzle is solved at the end
+    }
+
+    private void revealPuzzle(int[][] solvedBoard) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Pane cell = cells[row][column];
+                revealCell(cell, solvedBoard);
+            }
+        }
     }
 
     // Returns the coordinates of a cell
