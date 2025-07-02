@@ -212,13 +212,24 @@ public class SolvingScreen {
 
         // Create check cell button and format
         Button checkCell = new Button("Check Cell");
-        checkCell.setPrefSize(80, 40); // Small rectangular buttons
+        checkCell.setPrefSize(80, 40);
         checkCell.setStyle("-fx-font-size: 12;");
         buttonColumn.getChildren().add(checkCell);
 
         //
         checkCell.setOnAction(e -> {
             checkCell(selectedCell, solvedPuzzle);
+        });
+
+        // Create check puzzle button and format
+        Button checkPuzzle = new Button("Check Puzzle");
+        checkPuzzle.setPrefSize(80, 40);
+        checkPuzzle.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(checkPuzzle);
+
+        //
+        checkPuzzle.setOnAction(e -> {
+            checkPuzzle(solvedPuzzle);
         });
 
 
@@ -345,19 +356,33 @@ public class SolvingScreen {
     }
 
     private void checkCell(Pane cell, int[][] solvedPuzzle) {
+        if (cell.getChildren().isEmpty()) {
+            return;
+        }
+
         int[] cellCoords = findCellCoordinates(cell);
         int cellValue = getCellValue(cell);
-        if (findCellType(cell).equals("free") && cellValue == solvedPuzzle[cellCoords[0]][cellCoords[1]]) {
+        if (findCellType(cell).equals("free")) {
             Label value = (Label) cell.getChildren().get(0);
-            value.setStyle("-fx-text-fill: green;" + "-fx-font-size: 30;");
+            if (cellValue == solvedPuzzle[cellCoords[0]][cellCoords[1]]) {
+                value.setStyle("-fx-text-fill: green;" + "-fx-font-size: 30;");
 
-            Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("coords", findCellCoordinates(cell));
-            dataMap.put("type", "locked");
-            cell.setUserData(dataMap);
-        } else if (findCellType(cell).equals("free") && cellValue != solvedPuzzle[cellCoords[0]][cellCoords[1]]){
-            Label value = (Label) cell.getChildren().get(0);
-            value.setStyle("-fx-font-size: 30;" + "-fx-text-fill: red;");
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("coords", findCellCoordinates(cell));
+                dataMap.put("type", "locked");
+                cell.setUserData(dataMap);
+            } else {
+                value.setStyle("-fx-font-size: 30;" + "-fx-text-fill: red;");
+            }
+        }
+    }
+
+    private void checkPuzzle(int[][] solvedPuzzle) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Pane cell = cells[row][column];
+                checkCell(cell, solvedPuzzle);
+            }
         }
     }
 
