@@ -257,6 +257,18 @@ public class SolvingScreen {
             revealPuzzle(solvedPuzzle);
         });
 
+        // Create reset puzzle button and format
+        Button resetPuzzle = new Button("Reset Puzzle");
+        resetPuzzle.setPrefSize(80, 40);
+        resetPuzzle.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(resetPuzzle);
+
+        //
+        resetPuzzle.setOnAction(e -> {
+            resetPuzzle();
+            selectedCell = null;
+        });
+
 
 
 
@@ -438,6 +450,25 @@ public class SolvingScreen {
                 revealCell(cell, solvedBoard);
             }
         }
+    }
+
+    private void resetPuzzle() {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Pane cell = cells[row][column];
+                String dataType = findCellType(cell);
+                if (dataType.equals("free")) {
+                    cell.getChildren().clear();
+                } else if (dataType.equals("locked")) {
+                    cell.getChildren().clear();
+                    Map<String, Object> dataMap = new HashMap<>();
+                    dataMap.put("coords", findCellCoordinates(cell));
+                    dataMap.put("type", "free");
+                    cell.setUserData(dataMap);
+                }
+            }
+        }
+        resetCells();
     }
 
     // Returns the coordinates of a cell
