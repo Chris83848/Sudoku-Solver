@@ -349,15 +349,15 @@ public class SolvingScreen {
         int cellValue = getCellValue(cell);
         if (findCellType(cell).equals("free") && cellValue == solvedPuzzle[cellCoords[0]][cellCoords[1]]) {
             Label value = (Label) cell.getChildren().get(0);
-            value.setStyle("-fx-text-fill: green;");
-
+            value.setStyle("-fx-text-fill: green;" + "-fx-font-size: 30;");
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("coords", findCellCoordinates(cell));
             dataMap.put("type", "locked");
             cell.setUserData(dataMap);
-        } else {
-
+        } else if (findCellType(cell).equals("free") && cellValue != solvedPuzzle[cellCoords[0]][cellCoords[1]]){
+            Label value = (Label) cell.getChildren().get(0);
+            value.setStyle("-fx-font-size: 30;" + "-fx-text-fill: red;");
         }
     }
 
