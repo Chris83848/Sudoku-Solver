@@ -8,8 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import sudoku.logic.SudokuCandidatesManager;
 import sudoku.logic.SudokuSolverApplication;
+import sudoku.logic.SudokuSolverTechniques;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -401,9 +404,64 @@ public class SolvingScreen {
 
     private void hint() {
 
+        // Create current puzzle with candidates
+        int[][] currentPuzzle = findCurrentPuzzle();
+        ArrayList<Integer>[][] boardCandidates = new ArrayList[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                boardCandidates[i][j] = new ArrayList<>();
+            }
+        }
+
+        // Create copy of current puzzle for later comparison
+        int[][] currentCopy = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                currentCopy[i][j] = currentPuzzle[i][j];
+            }
+        }
+
+        // Go through each solving method and apply to find which cell can be found next
+        int[] hintCoordinate;
+        SudokuCandidatesManager.findCandidates(currentPuzzle, boardCandidates);
+        if (SudokuSolverTechniques.nakedSingles(currentPuzzle, boardCandidates)) {
+            hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
+        } else if (SudokuSolverTechniques.hiddenSingles(currentPuzzle, boardCandidates)){
+            hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
+        } else if (SudokuSolverTechniques.pointingPairs(currentPuzzle, boardCandidates)){
+            hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
+        } else if (SudokuSolverTechniques.nakedPairs(currentPuzzle, boardCandidates)) {
+            hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
+        } else if (SudokuSolverTechniques.nakedTriples(currentPuzzle, boardCandidates)) {
+            hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
+        } else {
+            SudokuSolverTechniques.nakedQuads(currentPuzzle, boardCandidates);
+            hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
+        }
+        Pane cell = cells[hintCoordinate[0]][hintCoordinate[1]];
+        // Update highlights
+        resetCells();
+        selectedCell = cell;
+        updateHighlights(selectedCell, hintCoordinate[0], hintCoordinate[1]);
+    }
+
+    private int[] findCoordinateChange(int[][] a, int[][] b) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                if (a[row][column] != b[row][column]) {
+                    return new int[]{row, column};
+                }
+            }
+        }
+        return null;
     }
 
     private boolean checkCompletion(int[][] solvedPuzzle) {
+        int[][] currentPuzzle = findCurrentPuzzle();
+        return UIComponents.arraysAreEqual(currentPuzzle, solvedPuzzle);
+    }
+
+    private int[][] findCurrentPuzzle() {
         int[][] currentPuzzle = new int[9][9];
 
         for (int i = 0; i < cells.length; i++) {
@@ -425,7 +483,7 @@ public class SolvingScreen {
                 }
             }
         }
-        return UIComponents.arraysAreEqual(currentPuzzle, solvedPuzzle);
+        return currentPuzzle;
     }
 
     private void utilityButtonCreation(VBox buttonColumn, int[][] solvedPuzzle) {
@@ -484,6 +542,17 @@ public class SolvingScreen {
         resetPuzzle.setOnAction(e -> {
             resetPuzzle();
             selectedCell = null;
+        });
+
+        // Create hint button and format
+        Button hintButton = new Button("Hint");
+        hintButton.setPrefSize(80, 40);
+        hintButton.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(hintButton);
+
+        // Show next easy cell to solve when clicked
+        hintButton.setOnAction(e -> {
+            hint();
         });
     }
 
