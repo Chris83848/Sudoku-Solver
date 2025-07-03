@@ -16,6 +16,7 @@ import java.util.Objects;
 
 public class SolvingScreen {
 
+    // Create Panes for cells and selected cell value
     private Pane[][] cells = new Pane[9][9];
     private Pane selectedCell = null;
     public Scene getScene(Stage solve, int[][] puzzle, boolean custom) {
@@ -52,7 +53,7 @@ public class SolvingScreen {
                                     "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";"
                     );
 
-                    // Tag cells as fixed
+                    // Tag cell as fixed and add coordinates
                     Map<String, Object> dataMap = new HashMap<>();
                     dataMap.put("coords", new int[]{row, column});
                     dataMap.put("type", "fixed");
@@ -85,7 +86,7 @@ public class SolvingScreen {
                             "-fx-border-width: " + UIComponents.getBorderWidth(row, column) + ";");
 
 
-                    // Map coordinates to each cell
+                    // Map coordinates and cell type to each cell
                     Map<String, Object> dataMap = new HashMap<>();
                     dataMap.put("coords", new int[]{row, column});
                     dataMap.put("type", "free");
@@ -122,7 +123,6 @@ public class SolvingScreen {
             int column = (num <= 5) ? (num - 1) : (num - 6);
 
             // Input number into highlighted square when button is clicked
-            int finalNum = num;
             numButton.setOnAction(e -> {
                 if (selectedCell != null && findCellType(selectedCell).equals("free")) {
 
@@ -144,39 +144,14 @@ public class SolvingScreen {
                     updateHighlights(selectedCell, currentRow, currentColumn);
 
 
-                    // Convert inputted puzzle into 2d array
-                    // CHECK CODE LATER and ask chatgpt
-                    int[][] currentPuzzle = new int[9][9];
-
-                    for (int i = 0; i < cells.length; i++) {
-                        for (int j = 0; j < cells[i].length; j++) {
-                            currentPuzzle[i][j] = 0; // default value
-
-                            for (javafx.scene.Node node : cells[i][j].getChildren()) {
-                                if (node instanceof Label label) {
-                                    String text = label.getText().trim();
-                                    if (!text.isEmpty()) {
-                                        try {
-                                            currentPuzzle[i][j] = Integer.parseInt(text);
-                                        } catch (NumberFormatException x) {
-                                            System.out.println("Invalid number in cell [" + i + "][" + j + "]: " + text);
-                                        }
-                                    }
-                                    break; // Stop after finding first Label
-                                }
-                            }
-                        }
-                    }
-
-
-                    // CLEAN UP AND OPTIMIZE
-                    if (UIComponents.arraysAreEqual(currentPuzzle, solvedPuzzle)) {
+                    if (checkCompletion(solvedPuzzle)) {
                         System.out.println("Checking if puzzle is solved.");
                         Alert success = new Alert(Alert.AlertType.INFORMATION);
                         success.setTitle("yay");
                         success.setHeaderText(null);
                         success.setContentText("You win");
                         success.showAndWait();
+                        // Make new screen later
                     }
                 }
             });
@@ -210,68 +185,8 @@ public class SolvingScreen {
         VBox buttonColumn = new VBox(10); // spacing of 10 between buttons
         buttonColumn.setAlignment(Pos.TOP_CENTER); // align buttons to top-center
 
-
-        // Put all into one method called button creation or something
-
-        // Create check cell button and format
-        Button checkCell = new Button("Check Cell");
-        checkCell.setPrefSize(80, 40);
-        checkCell.setStyle("-fx-font-size: 12;");
-        buttonColumn.getChildren().add(checkCell);
-
-        //
-        checkCell.setOnAction(e -> {
-            checkCell(selectedCell, solvedPuzzle);
-        });
-
-        // Create check puzzle button and format
-        Button checkPuzzle = new Button("Check Puzzle");
-        checkPuzzle.setPrefSize(80, 40);
-        checkPuzzle.setStyle("-fx-font-size: 12;");
-        buttonColumn.getChildren().add(checkPuzzle);
-
-        //
-        checkPuzzle.setOnAction(e -> {
-            checkPuzzle(solvedPuzzle);
-        });
-
-        // Create check puzzle button and format
-        Button revealCell = new Button("Reveal Cell");
-        revealCell.setPrefSize(80, 40);
-        revealCell.setStyle("-fx-font-size: 12;");
-        buttonColumn.getChildren().add(revealCell);
-
-        //
-        revealCell.setOnAction(e -> {
-            revealCell(selectedCell, solvedPuzzle);
-        });
-
-        // Create reveal puzzle button and format
-        Button revealPuzzle = new Button("Reveal Puzzle");
-        revealPuzzle.setPrefSize(80, 40);
-        revealPuzzle.setStyle("-fx-font-size: 12;");
-        buttonColumn.getChildren().add(revealPuzzle);
-
-        //
-        revealPuzzle.setOnAction(e -> {
-            revealPuzzle(solvedPuzzle);
-        });
-
-        // Create reset puzzle button and format
-        Button resetPuzzle = new Button("Reset Puzzle");
-        resetPuzzle.setPrefSize(80, 40);
-        resetPuzzle.setStyle("-fx-font-size: 12;");
-        buttonColumn.getChildren().add(resetPuzzle);
-
-        //
-        resetPuzzle.setOnAction(e -> {
-            resetPuzzle();
-            selectedCell = null;
-        });
-
-
-
-
+        // Add all utility buttons
+        utilityButtonCreation(buttonColumn, solvedPuzzle);
 
         // Format middle layout
         HBox middleLayout = new HBox(30, board, buttonColumn);
@@ -349,7 +264,7 @@ public class SolvingScreen {
         }
     }
 
-    // Return the value inside of a cell
+    // Return the value inside a cell
     private int getCellValue(Pane cell) {
         int cellValue = -1;
         if (!cell.getChildren().isEmpty() && cell.getChildren().get(0) instanceof Label) {
@@ -392,6 +307,7 @@ public class SolvingScreen {
         }
     }
 
+    // Turn text of cell green if correct, red if not
     private void checkCell(Pane cell, int[][] solvedPuzzle) {
         if (cell.getChildren().isEmpty()) {
             return;
@@ -414,6 +330,7 @@ public class SolvingScreen {
         }
     }
 
+    // Check entire puzzle using checkCell method
     private void checkPuzzle(int[][] solvedPuzzle) {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
@@ -423,6 +340,7 @@ public class SolvingScreen {
         }
     }
 
+    // Reveal correct value inside of empty cell
     private void revealCell(Pane cell, int[][] solvedBoard) {
         if (findCellType(cell).equals("free")) {
             int[] coords = findCellCoordinates(cell);
@@ -438,11 +356,20 @@ public class SolvingScreen {
             dataMap.put("coords", findCellCoordinates(cell));
             dataMap.put("type", "locked");
             cell.setUserData(dataMap);
-        }
 
-        // Trigger check to see if puzzle is solved at the end
+            if (checkCompletion(solvedBoard)) {
+                System.out.println("Checking if puzzle is solved.");
+                Alert success = new Alert(Alert.AlertType.INFORMATION);
+                success.setTitle("yay");
+                success.setHeaderText(null);
+                success.setContentText("You win");
+                success.showAndWait();
+                // Make new screen later
+            }
+        }
     }
 
+    // Reveal entire puzzle using revealCell method
     private void revealPuzzle(int[][] solvedBoard) {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
@@ -452,6 +379,7 @@ public class SolvingScreen {
         }
     }
 
+    // Set puzzle back to original version
     private void resetPuzzle() {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
@@ -469,6 +397,94 @@ public class SolvingScreen {
             }
         }
         resetCells();
+    }
+
+    private void hint() {
+
+    }
+
+    private boolean checkCompletion(int[][] solvedPuzzle) {
+        int[][] currentPuzzle = new int[9][9];
+
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[i].length; j++) {
+                currentPuzzle[i][j] = 0; // default value
+
+                for (javafx.scene.Node node : cells[i][j].getChildren()) {
+                    if (node instanceof Label label) {
+                        String text = label.getText().trim();
+                        if (!text.isEmpty()) {
+                            try {
+                                currentPuzzle[i][j] = Integer.parseInt(text);
+                            } catch (NumberFormatException x) {
+                                System.out.println("Invalid number in cell [" + i + "][" + j + "]: " + text);
+                            }
+                        }
+                        break; // Stop after finding first Label
+                    }
+                }
+            }
+        }
+        return UIComponents.arraysAreEqual(currentPuzzle, solvedPuzzle);
+    }
+
+    private void utilityButtonCreation(VBox buttonColumn, int[][] solvedPuzzle) {
+
+        // Create check cell button and format
+        Button checkCell = new Button("Check Cell");
+        checkCell.setPrefSize(80, 40);
+        checkCell.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(checkCell);
+
+        // Check cell correctness when clicked
+        checkCell.setOnAction(e -> {
+            checkCell(selectedCell, solvedPuzzle);
+        });
+
+        // Create check puzzle button and format
+        Button checkPuzzle = new Button("Check Puzzle");
+        checkPuzzle.setPrefSize(80, 40);
+        checkPuzzle.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(checkPuzzle);
+
+        // Check puzzle correctness when clicked
+        checkPuzzle.setOnAction(e -> {
+            checkPuzzle(solvedPuzzle);
+        });
+
+        // Create reveal cell button and format
+        Button revealCell = new Button("Reveal Cell");
+        revealCell.setPrefSize(80, 40);
+        revealCell.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(revealCell);
+
+        // Reveal selected cell when clicked
+        revealCell.setOnAction(e -> {
+            revealCell(selectedCell, solvedPuzzle);
+        });
+
+        // Create reveal puzzle button and format
+        Button revealPuzzle = new Button("Reveal Puzzle");
+        revealPuzzle.setPrefSize(80, 40);
+        revealPuzzle.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(revealPuzzle);
+
+        // Reveal puzzle when clicked
+        revealPuzzle.setOnAction(e -> {
+            revealPuzzle(solvedPuzzle);
+        });
+
+        // Create reset puzzle button and format
+        Button resetPuzzle = new Button("Reset Puzzle");
+        resetPuzzle.setPrefSize(80, 40);
+        resetPuzzle.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(resetPuzzle);
+
+        // Reset puzzle when clicked
+        resetPuzzle.setOnAction(e -> {
+            resetPuzzle();
+            selectedCell = null;
+        });
     }
 
     // Returns the coordinates of a cell
