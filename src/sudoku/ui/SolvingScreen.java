@@ -1,5 +1,6 @@
 package sudoku.ui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 import sudoku.logic.SudokuCandidatesManager;
 import sudoku.logic.SudokuSolverApplication;
 import sudoku.logic.SudokuSolverTechniques;
+import sudoku.logic.SudokuSolverTechniquesHelpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -554,6 +556,21 @@ public class SolvingScreen {
         hintButton.setOnAction(e -> {
             hint();
         });
+
+        // Create recursion button and format
+        Button recursionButton = new Button("Solve by Recursion");
+        recursionButton.setPrefSize(80, 40);
+        recursionButton.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(recursionButton);
+
+        // Solves by recursion when clicked
+        recursionButton.setOnAction(e -> {
+            resetPuzzle();
+            int[][] currentPuzzle = findCurrentPuzzle();
+            new Thread(() -> {
+                recursive(currentPuzzle, 0, 0);
+            }).start();
+        });
     }
 
     // Returns the coordinates of a cell
@@ -574,5 +591,99 @@ public class SolvingScreen {
     // given a coordinate, highlight squares
     // then just call method from when a cell is clicked and when a number is inserted/deleted
 
+
+    
+    private int[][] recursive(int[][] currentPuzzle, int i, int j) {
+        if (j == 9) {
+            j = 0;
+            i++;
+        }
+
+        if (i == 9) {
+            return currentPuzzle; // Puzzle complete
+        }
+
+        if (currentPuzzle[i][j] == 0) {
+            if (!placeUpdateNumber(currentPuzzle, i, j)) {
+                return currentPuzzle;
+            } else {
+
+                if (SudokuSolverApplication.boardComplete(currentPuzzle)) {
+                    return currentPuzzle;
+                } else {
+                    int[][] currentBoard = recursive(currentPuzzle, i, j + 1);
+                    while (!SudokuSolverApplication.boardComplete(currentBoard)) {
+                        if (!placeUpdateNumber(currentPuzzle, i, j)) {
+                            return currentPuzzle;
+                        } else {
+                            currentBoard = recursive(currentPuzzle, i, j + 1);
+                        }
+                    }
+                    return currentBoard;
+                }
+            }
+        } else {
+            return recursive(currentPuzzle, i, j + 1);
+        }
+    }
+
+    // This method places numbers for the recursive solver until it finds a possible one.
+    private boolean placeUpdateNumber(int[][] board, int i, int j) {
+        if (board[i][j] >= 9) {
+            board[i][j] = 0;
+            updateBoard(board);
+            sleep();
+            return false;
+        }
+        board[i][j]++;
+        updateBoard(board);
+        sleep();
+        while (SudokuSolverApplication.checkBoardError(board, i, j) && board[i][j] <= 9) {
+            if (board[i][j] != 9) {
+                board[i][j]++;
+                updateBoard(board);
+                sleep();
+            } else {
+                board[i][j] = 0;
+                updateBoard(board);
+                sleep();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public void updateBoard(int[][] board) {
+        Platform.runLater(() -> {
+            for (int row = 0; row < 9; row++) {
+                for (int col = 0; col < 9; col++) {
+                    Pane cell = cells[row][col];
+                    String type = findCellType(cell);
+
+                    // Only update free (editable) cells
+                    if (type.equals("free")) {
+                        cell.getChildren().clear();
+
+                        int value = board[row][col];
+                        if (value != 0) {
+                            Label label = new Label(String.valueOf(value));
+                            label.setStyle("-fx-font-size: 30;");
+                            label.setAlignment(Pos.CENTER);
+                            label.setPrefSize(60, 60);
+                            cell.getChildren().add(label);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 }
