@@ -565,10 +565,30 @@ public class SolvingScreen {
 
         // Solves by recursion when clicked
         recursionButton.setOnAction(e -> {
+
+            // Disable other buttons while solving
+            checkCell.setDisable(true);
+            checkPuzzle.setDisable(true);
+            revealCell.setDisable(true);
+            revealPuzzle.setDisable(true);
+            resetPuzzle.setDisable(true);
+            hintButton.setDisable(true);
+            recursionButton.setDisable(true);
+
+            // Recursively solve puzzle in real time
             resetPuzzle();
             int[][] currentPuzzle = findCurrentPuzzle();
             new Thread(() -> {
                 recursive(currentPuzzle, 0, 0);
+
+                // Reactivate buttons
+                checkCell.setDisable(false);
+                checkPuzzle.setDisable(false);
+                revealCell.setDisable(false);
+                revealPuzzle.setDisable(false);
+                resetPuzzle.setDisable(false);
+                hintButton.setDisable(false);
+                recursionButton.setDisable(false);
             }).start();
         });
     }
@@ -588,11 +608,7 @@ public class SolvingScreen {
         return type;
     }
 
-    // given a coordinate, highlight squares
-    // then just call method from when a cell is clicked and when a number is inserted/deleted
 
-
-    
     private int[][] recursive(int[][] currentPuzzle, int i, int j) {
         if (j == 9) {
             j = 0;
