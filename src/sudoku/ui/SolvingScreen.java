@@ -3,6 +3,7 @@ package sudoku.ui;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -24,6 +25,7 @@ public class SolvingScreen {
     // Create Panes for cells and selected cell value
     private Pane[][] cells = new Pane[9][9];
     private Pane selectedCell = null;
+    private boolean isSolving = false;
     public Scene getScene(Stage solve, int[][] puzzle, boolean custom) {
 
         // Make copy of puzzle to then make solved puzzle from it
@@ -71,6 +73,10 @@ public class SolvingScreen {
                     // Update selected cell when clicked and adjust highlights accordingly
                     wrapper.setOnMouseClicked(e -> {
 
+                        if (isSolving) {
+                            return;
+                        }
+
                         // Reset cell styles
                         if (selectedCell != null) {
                             resetCells();
@@ -102,6 +108,11 @@ public class SolvingScreen {
                     int finalRow = row;
                     int finalColumn = column;
                     cell.setOnMouseClicked(e -> {
+
+                        if (isSolving) {
+                            return;
+                        }
+
                         if (selectedCell != null) {
                             resetCells();
                         }
@@ -402,6 +413,7 @@ public class SolvingScreen {
             }
         }
         resetCells();
+        selectedCell = null;
     }
 
     private void hint() {
@@ -566,6 +578,8 @@ public class SolvingScreen {
         // Solves by recursion when clicked
         recursionButton.setOnAction(e -> {
 
+            isSolving = true;
+
             // Disable other buttons while solving
             checkCell.setDisable(true);
             checkPuzzle.setDisable(true);
@@ -575,11 +589,14 @@ public class SolvingScreen {
             hintButton.setDisable(true);
             recursionButton.setDisable(true);
 
+
             // Recursively solve puzzle in real time
             resetPuzzle();
             int[][] currentPuzzle = findCurrentPuzzle();
             new Thread(() -> {
                 recursive(currentPuzzle, 0, 0);
+
+                isSolving = false;
 
                 // Reactivate buttons
                 checkCell.setDisable(false);
