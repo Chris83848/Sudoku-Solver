@@ -161,13 +161,7 @@ public class SolvingScreen {
 
 
                     if (checkCompletion(solvedPuzzle)) {
-                        System.out.println("Checking if puzzle is solved.");
-                        Alert success = new Alert(Alert.AlertType.INFORMATION);
-                        success.setTitle("yay");
-                        success.setHeaderText(null);
-                        success.setContentText("You win");
-                        success.showAndWait();
-                        // Make new screen later
+
                     }
                 }
             });
@@ -260,7 +254,6 @@ public class SolvingScreen {
                         "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
             }
         }
-
     }
 
     // Highlight identical numbers in puzzle
@@ -374,13 +367,7 @@ public class SolvingScreen {
             cell.setUserData(dataMap);
 
             if (checkCompletion(solvedBoard)) {
-                System.out.println("Checking if puzzle is solved.");
-                Alert success = new Alert(Alert.AlertType.INFORMATION);
-                success.setTitle("yay");
-                success.setHeaderText(null);
-                success.setContentText("You win");
-                success.showAndWait();
-                // Make new screen later
+
             }
         }
     }
@@ -607,7 +594,52 @@ public class SolvingScreen {
                 hintButton.setDisable(false);
                 recursionButton.setDisable(false);
             }).start();
+
+            // insert ending
         });
+
+        // Create human button and format
+        Button humanButton = new Button("Solve Humanly");
+        humanButton.setPrefSize(80, 40);
+        humanButton.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(humanButton);
+
+        // Solves humanly when clicked
+        humanButton.setOnAction(e -> {
+
+            isSolving = true;
+
+            // Disable other buttons while solving
+            checkCell.setDisable(true);
+            checkPuzzle.setDisable(true);
+            revealCell.setDisable(true);
+            revealPuzzle.setDisable(true);
+            resetPuzzle.setDisable(true);
+            hintButton.setDisable(true);
+            recursionButton.setDisable(true);
+            humanButton.setDisable(true);
+
+
+            // Humanly solve puzzle in real time
+            resetPuzzle();
+            new Thread(() -> {
+                human(solvedPuzzle);
+
+                isSolving = false;
+
+                // Reactivate buttons
+                checkCell.setDisable(false);
+                checkPuzzle.setDisable(false);
+                revealCell.setDisable(false);
+                revealPuzzle.setDisable(false);
+                resetPuzzle.setDisable(false);
+                hintButton.setDisable(false);
+                recursionButton.setDisable(false);
+                humanButton.setDisable(false);
+            }).start();
+        });
+
+        // insert ending
     }
 
     // Returns the coordinates of a cell
@@ -660,35 +692,46 @@ public class SolvingScreen {
         }
     }
 
+    private void human(int[][] solvedPuzzle) {
+        while (!checkCompletion(solvedPuzzle)) {
+            hint();
+
+            Platform.runLater(() -> {
+                revealCell(selectedCell, solvedPuzzle);
+            });
+            sleep(1000);
+        }
+    }
+
     // This method places numbers for the recursive solver until it finds a possible one.
     private boolean placeUpdateNumber(int[][] board, int i, int j) {
         if (board[i][j] >= 9) {
             board[i][j] = 0;
             updateBoard(board);
-            sleep();
+            sleep(5);
             return false;
         }
         board[i][j]++;
         updateBoard(board);
-        sleep();
+        sleep(5);
         while (SudokuSolverApplication.checkBoardError(board, i, j) && board[i][j] <= 9) {
             if (board[i][j] != 9) {
                 board[i][j]++;
                 updateBoard(board);
-                sleep();
+                sleep(5);
             } else {
                 board[i][j] = 0;
                 updateBoard(board);
-                sleep();
+                sleep(5);
                 return false;
             }
         }
         return true;
     }
 
-    private void sleep() {
+    private void sleep(int time) {
         try {
-            Thread.sleep(5);
+            Thread.sleep(time);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
