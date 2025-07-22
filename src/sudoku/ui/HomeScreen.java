@@ -1,8 +1,10 @@
 package sudoku.ui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -10,9 +12,16 @@ public class HomeScreen {
 
     public Scene getScene(Stage home) {
 
+        // Create title label
+        Label titleLabel = new Label("Sudoku Game");
+        titleLabel.getStyleClass().add("title-label");
+
         // Create buttons for solving different puzzles
         Button loadButton = new Button("Solve Own Puzzle");
         Button generateButton = new Button("Solve Random Puzzle");
+
+        loadButton.getStyleClass().add("home-button");
+        generateButton.getStyleClass().add("home-button");
 
         // Call difficulty screen when generate button is clicked
         generateButton.setOnAction(e -> {
@@ -29,8 +38,14 @@ public class HomeScreen {
         });
 
         // Set layout and return screen
-        VBox layout = new VBox(20, loadButton, generateButton);
+        VBox layout = new VBox(30, titleLabel, loadButton, generateButton);
         layout.setAlignment(Pos.CENTER);
-        return new Scene(layout, 800, 600);
+        layout.setPadding(new Insets(50));
+        layout.getStyleClass().add("home-root");
+
+        Scene scene = new Scene(layout, 800, 600);
+
+
+        return scene;
     }
 }
