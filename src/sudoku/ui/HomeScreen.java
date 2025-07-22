@@ -19,11 +19,11 @@ public class HomeScreen {
                 "-fx-font-size: 48px;" +
                         "-fx-font-weight: bold;" +
                         "-fx-text-fill: #00264d;" +
-                        "-fx-font-family: 'Courier New';"
+                        "-fx-font-family: 'Segoe UI';"
         );
 
         // Create subheading label and stylize
-        Label subheadingLabel = new Label("Choose Your Puzzle");
+        Label subheadingLabel = new Label("Choose Your Puzzle:");
         subheadingLabel.setStyle(
                 "-fx-font-size: 20px;" +
                         "-fx-text-fill: #003366;" +
@@ -69,7 +69,7 @@ public class HomeScreen {
         VBox layout = new VBox(40, titleLabel, subheadingLabel, buttonBox);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(60));
-        layout.setStyle("-fx-background-color: #cce6ff;"); // Blue background
+        layout.setStyle("-fx-background-color: #b3daff;"); // Blue background
 
         return new Scene(layout, 800, 600);
     }
