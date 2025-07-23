@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -53,8 +54,18 @@ public class DifficultySelectionScreen {
             difficulties.setMaximized(true);
         });
 
-        // Set layout and return screen
-        VBox layout = new VBox(20, label, easyButton, mediumButton, hardButton, backButton);
+        // Disable hard button for now
+        hardButton.setDisable(true);
+        Label note = new Label("*Hard mode coming soon*");
+        note.setStyle("-fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-text-fill: red;");
+
+
+        // Set layouts and return screen
+        HBox hard = new HBox(10, hardButton, note);
+        hard.setAlignment(Pos.CENTER);
+        hard.setPadding(new Insets(0, 0, 0, 175));
+
+        VBox layout = new VBox(20, label, easyButton, mediumButton, hard, backButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
 
