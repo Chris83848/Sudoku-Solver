@@ -105,7 +105,7 @@ public class LoadPuzzleScreen {
             numButton.setPrefSize(60, 60);
 
             numButton.setStyle(
-                    "-fx-font-size: 18; " +
+                        "-fx-font-size: 24;" +
                             "-fx-background-color: white; " +
                             "-fx-text-fill: black; " +
                             "-fx-border-color: #7cfeff; " +
@@ -114,7 +114,7 @@ public class LoadPuzzleScreen {
             );
 
             numButton.setOnMouseEntered(eh -> numButton.setStyle(
-                    "-fx-font-size: 18; " +
+                    "-fx-font-size: 24;" +
                             "-fx-background-color: #E0F7FF; " +
                             "-fx-text-fill: black; " +
                             "-fx-border-color: #7cfeff; " +
@@ -123,7 +123,7 @@ public class LoadPuzzleScreen {
             ));
 
             numButton.setOnMouseExited(eh -> numButton.setStyle(
-                    "-fx-font-size: 18; " +
+                    "-fx-font-size: 24;" +
                             "-fx-background-color: white; " +
                             "-fx-text-fill: black; " +
                             "-fx-border-color: #7cfeff; " +
@@ -158,7 +158,7 @@ public class LoadPuzzleScreen {
         clearButton.setPrefSize(60, 60);
 
         clearButton.setStyle(
-                "-fx-font-size: 20; " +
+                "-fx-font-size: 24; " +
                         "-fx-text-fill: red; " +
                         "-fx-background-color: white; " +
                         "-fx-font-family: 'Courier New'; " +
@@ -167,7 +167,7 @@ public class LoadPuzzleScreen {
                         "-fx-background-radius: 3;"
         );
         clearButton.setOnMouseEntered(eh -> clearButton.setStyle(
-                "-fx-font-size: 20; " +
+                "-fx-font-size: 24; " +
                         "-fx-text-fill: red; " +
                         "-fx-background-color: #ffd6d6; " +
                         "-fx-font-family: 'Courier New'; " +
@@ -177,7 +177,7 @@ public class LoadPuzzleScreen {
         ));
 
         clearButton.setOnMouseExited(eh -> clearButton.setStyle(
-                "-fx-font-size: 20; " +
+                "-fx-font-size: 24; " +
                         "-fx-text-fill: red; " +
                         "-fx-background-color: white; " +
                         "-fx-font-family: 'Courier New'; " +
