@@ -26,7 +26,12 @@ public class SolvingScreen {
     private Pane[][] cells = new Pane[9][9];
     private Pane selectedCell = null;
     private boolean isSolving = false;
-    public Scene getScene(Stage solve, int[][] puzzle, boolean custom) {
+    public Scene getScene(Stage solve, int[][] puzzle, String difficulty, boolean custom) {
+
+        // Create title of screen
+        Label title = new Label(difficulty);
+        title.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-text-fill: #000000;");
+        title.setAlignment(Pos.CENTER);
 
         // Make copy of puzzle to then make solved puzzle from it
         int[][] tempPuzzle = new int[9][9];
@@ -256,7 +261,7 @@ public class SolvingScreen {
         middleLayout.setPadding(new Insets(0, 0, 0, 210));
 
         // Wrap everything in vertical layout
-        VBox layout = new VBox(20, middleLayout, numberPad);
+        VBox layout = new VBox(20, title, middleLayout, numberPad);
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: #3593ff;");
 

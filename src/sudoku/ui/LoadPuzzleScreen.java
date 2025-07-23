@@ -231,7 +231,7 @@ public class LoadPuzzleScreen {
                 errorAlert.showAndWait();
             } else {
                 SolvingScreen solvingScreen = new SolvingScreen();
-                load.setScene(solvingScreen.getScene(load, userPuzzle, true));
+                load.setScene(solvingScreen.getScene(load, userPuzzle, "Custom", true));
                 load.setMaximized(true);
             }
         });

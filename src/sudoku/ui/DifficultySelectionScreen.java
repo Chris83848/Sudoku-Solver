@@ -35,7 +35,7 @@ public class DifficultySelectionScreen {
         easyButton.setOnAction(e -> {
             int[][] easyPuzzle = SudokuBoardGenerator.generateEasyBoardPuzzle();
             SolvingScreen solvingScreen = new SolvingScreen();
-            difficulties.setScene(solvingScreen.getScene(difficulties, easyPuzzle, false));
+            difficulties.setScene(solvingScreen.getScene(difficulties, easyPuzzle, "Easy", false));
             difficulties.setMaximized(true);
         });
 
@@ -43,7 +43,7 @@ public class DifficultySelectionScreen {
         mediumButton.setOnAction(e -> {
             int[][] mediumPuzzle = SudokuBoardGenerator.generateMediumBoardPuzzle();
             SolvingScreen solvingScreen = new SolvingScreen();
-            difficulties.setScene(solvingScreen.getScene(difficulties, mediumPuzzle, false));
+            difficulties.setScene(solvingScreen.getScene(difficulties, mediumPuzzle, "Medium", false));
             difficulties.setMaximized(true);
         });
 
