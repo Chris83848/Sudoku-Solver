@@ -1,5 +1,6 @@
 package sudoku.ui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -28,7 +29,7 @@ public class HomeScreen {
         Label subheadingLabel = new Label("Choose Your Puzzle:");
         subheadingLabel.setStyle(
                 "-fx-font-size: 20px;" +
-                        "-fx-text-fill: #000000" +
+                        "-fx-text-fill: #000000;" +
                         "-fx-font-weight: bold;" +
                         "-fx-font-family: 'Arial';"
         );
@@ -36,6 +37,7 @@ public class HomeScreen {
         // Create buttons for solving different puzzles and stylize
         Button loadButton = new Button("Solve Custom Puzzle");
         Button generateButton = new Button("Solve Random Puzzle");
+        Button exitButton = new Button("Close Application");
 
         String buttonStyle =
                 "-fx-font-size: 18px;" +
@@ -49,6 +51,7 @@ public class HomeScreen {
 
         loadButton.setStyle(buttonStyle);
         generateButton.setStyle(buttonStyle);
+        exitButton.setStyle(buttonStyle);
 
         // Call difficulty screen when generate button is clicked
         generateButton.setOnAction(e -> {
@@ -69,12 +72,18 @@ public class HomeScreen {
             home.setMaximized(true);
         });
 
+        // Quit application when exit button is clicked
+        exitButton.setOnAction(e -> {
+            Platform.exit();
+        });
+
         // Set button layout
         HBox buttonBox = new HBox(40, loadButton, generateButton);
         buttonBox.setAlignment(Pos.CENTER);
+        HBox quitBox = new HBox(0, exitButton);
 
         // Set main layout and return scene
-        VBox layout = new VBox(40, titleLabel, subheadingLabel, buttonBox);
+        VBox layout = new VBox(40, titleLabel, subheadingLabel, buttonBox, exitButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(60));
         layout.setStyle("-fx-background-color: #3593ff;");
