@@ -72,7 +72,7 @@ public class LoadPuzzleScreen {
                     selectedCell = cell;
                     cell.setStyle("-fx-border-color: black;" +
                             "-fx-border-width: " + UIComponents.getBorderWidth(finalRow, finalColumn) + ";" +
-                            "-fx-font-size: 20;" + "-fx-background-color: lightblue; ");
+                            "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
                 });
 
                 board.add(cell, column, row);
@@ -80,10 +80,7 @@ public class LoadPuzzleScreen {
         }
 
         // Create grid pane for number pad
-        GridPane numberPad = new GridPane();
-        numberPad.setAlignment(Pos.CENTER);
-        numberPad.setHgap(10);
-        numberPad.setVgap(10);
+        GridPane numberPad = UIComponents.createNumberPad();
 
         // Create buttons for numbers 1-9 and for number pad
         for (int num = 1; num <= 9; num++) {
@@ -162,7 +159,8 @@ public class LoadPuzzleScreen {
                 errorAlert.showAndWait();
             } else {
                 SolvingScreen solvingScreen = new SolvingScreen();
-                load.setScene(solvingScreen.getScene(load, userPuzzle));
+                load.setScene(solvingScreen.getScene(load, userPuzzle, true));
+                load.setMaximized(true);
             }
         });
 
