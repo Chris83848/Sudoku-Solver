@@ -19,18 +19,20 @@ public class DifficultySelectionScreen {
         Button hardButton = new Button("Hard");
         Button backButton = new Button("Back");
 
-        //
+        // Create easy sudoku puzzle and send to solving screen
         easyButton.setOnAction(e -> {
             int[][] easyPuzzle = SudokuBoardGenerator.generateEasyBoardPuzzle();
             SolvingScreen solvingScreen = new SolvingScreen();
-            difficulties.setScene(solvingScreen.getScene(difficulties, easyPuzzle));
+            difficulties.setScene(solvingScreen.getScene(difficulties, easyPuzzle, false));
+            difficulties.setMaximized(true);
         });
 
-        //
+        // Create medium sudoku puzzle and send to solving screen
         mediumButton.setOnAction(e -> {
             int[][] mediumPuzzle = SudokuBoardGenerator.generateMediumBoardPuzzle();
             SolvingScreen solvingScreen = new SolvingScreen();
-            difficulties.setScene(solvingScreen.getScene(difficulties, mediumPuzzle));
+            difficulties.setScene(solvingScreen.getScene(difficulties, mediumPuzzle, false));
+            difficulties.setMaximized(true);
         });
 
         // Call previous screen (home screen) when back button is clicked
