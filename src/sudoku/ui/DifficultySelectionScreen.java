@@ -17,7 +17,7 @@ public class DifficultySelectionScreen {
 
         // Create title and stylize
         Label label = new Label("Select Difficulty");
-        label.setStyle("-fx-font-size: 36px; -fx-font-family: 'Segoe UI'; -fx-text-fill: #003366;");
+        label.setStyle("-fx-font-size: 36px; -fx-font-family: 'Segoe UI'; -fx-text-fill: #000000; -fx-font-weight: bold");
 
         // Create buttons for different difficulties
         Button easyButton = new Button("Easy");
@@ -57,20 +57,20 @@ public class DifficultySelectionScreen {
         // Disable hard button for now
         hardButton.setDisable(true);
         Label note = new Label("*Hard mode coming soon*");
-        note.setStyle("-fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-text-fill: red;");
+        note.setStyle("-fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-text-fill: red; -fx-font-weight: bold");
 
 
         // Set layouts and return screen
         HBox hard = new HBox(10, hardButton, note);
         hard.setAlignment(Pos.CENTER);
-        hard.setPadding(new Insets(0, 0, 0, 175));
+        hard.setPadding(new Insets(0, 0, 0, 180));
 
         VBox layout = new VBox(20, label, easyButton, mediumButton, hard, backButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
 
         StackPane root = new StackPane(layout);
-        root.setStyle("-fx-background-color: #b3daff;"); // Soft Azure
+        root.setStyle("-fx-background-color: #3593ff;"); // Soft Azure
 
         return new Scene(root, 800, 600);
     }
@@ -78,7 +78,7 @@ public class DifficultySelectionScreen {
     private void styleButton(Button button) {
         button.setStyle("-fx-font-size: 18px;" +
                 "-fx-font-family: 'Verdana';" +
-                "-fx-background-color: #007acc;" +
+                "-fx-background-color: #000000;" +
                 "-fx-text-fill: white;" +
                 "-fx-background-radius: 8;" +
                 "-fx-padding: 12 24;" +

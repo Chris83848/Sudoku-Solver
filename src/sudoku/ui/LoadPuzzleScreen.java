@@ -21,18 +21,34 @@ public class LoadPuzzleScreen {
 
         // Create title of screen
         Label title = new Label("Input Your Puzzle Below");
-        title.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+        title.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-text-fill: #000000;");
         title.setAlignment(Pos.CENTER);
 
         // Create back button to go back to home screen
         Button backButton = new Button("Back");
-        backButton.setStyle("-fx-font-size: 14;");
+
+        backButton.setStyle("-fx-font-size: 14; -fx-background-color: transparent; -fx-text-fill: #00264d; -fx-font-weight: bold; -fx-font-family: 'Courier New';");
+        backButton.setOnMouseEntered(e -> backButton.setUnderline(true));
+        backButton.setOnMouseExited(e -> backButton.setUnderline(false));
+
         backButton.setOnAction(e -> {
             load.setScene(new HomeScreen().getScene(load));
         });
 
         Button submitButton = new Button("Submit");
-        submitButton.setPrefSize(80, 40);
+        submitButton.setPrefSize(110, 40);
+
+        submitButton.setStyle(
+                "-fx-font-size: 16px;" +
+                        "-fx-font-family: 'Verdana';" +
+                        "-fx-background-color: #000000;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-padding: 12 24;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 3);" +
+                        "-fx-cursor: hand;"
+        );
+
 
         // Create grid pane for the sudoku board, including size and style
         GridPane board = UIComponents.createSudokuBoard();
@@ -87,7 +103,34 @@ public class LoadPuzzleScreen {
             // Create button
             Button numButton = new Button(String.valueOf(num));
             numButton.setPrefSize(60, 60);
-            numButton.setStyle("-fx-font-size: 18;");
+
+            numButton.setStyle(
+                    "-fx-font-size: 18; " +
+                            "-fx-background-color: white; " +
+                            "-fx-text-fill: black; " +
+                            "-fx-border-color: #7cfeff; " +
+                            "-fx-border-radius: 3; " +
+                            "-fx-background-radius: 3;"
+            );
+
+            numButton.setOnMouseEntered(eh -> numButton.setStyle(
+                    "-fx-font-size: 18; " +
+                            "-fx-background-color: #E0F7FF; " +
+                            "-fx-text-fill: black; " +
+                            "-fx-border-color: #7cfeff; " +
+                            "-fx-border-radius: 3; " +
+                            "-fx-background-radius: 3;"
+            ));
+
+            numButton.setOnMouseExited(eh -> numButton.setStyle(
+                    "-fx-font-size: 18; " +
+                            "-fx-background-color: white; " +
+                            "-fx-text-fill: black; " +
+                            "-fx-border-color: #7cfeff; " +
+                            "-fx-border-radius: 3; " +
+                            "-fx-background-radius: 3;"
+            ));
+
 
             // Determine coordinates for number pad
             int row = (num <= 5) ? 0 : 1;
@@ -113,7 +156,36 @@ public class LoadPuzzleScreen {
         // Create clear button and add to last slot in number pad
         Button clearButton = new Button("X");
         clearButton.setPrefSize(60, 60);
-        clearButton.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
+
+        clearButton.setStyle(
+                "-fx-font-size: 20; " +
+                        "-fx-text-fill: red; " +
+                        "-fx-background-color: white; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-border-color: #DC143C; " +
+                        "-fx-border-radius: 3; " +
+                        "-fx-background-radius: 3;"
+        );
+        clearButton.setOnMouseEntered(eh -> clearButton.setStyle(
+                "-fx-font-size: 20; " +
+                        "-fx-text-fill: red; " +
+                        "-fx-background-color: #ffd6d6; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-border-color: #DC143C; " +
+                        "-fx-border-radius: 3; " +
+                        "-fx-background-radius: 3;"
+        ));
+
+        clearButton.setOnMouseExited(eh -> clearButton.setStyle(
+                "-fx-font-size: 20; " +
+                        "-fx-text-fill: red; " +
+                        "-fx-background-color: white; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-border-color: #DC143C; " +
+                        "-fx-border-radius: 3; " +
+                        "-fx-background-radius: 3;"
+        ));
+
 
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
@@ -177,6 +249,8 @@ public class LoadPuzzleScreen {
         overallLayout.setCenter(coreLayout);
         BorderPane.setAlignment(backButton, Pos.TOP_LEFT);
         BorderPane.setMargin(backButton, new javafx.geometry.Insets(10));
+
+        overallLayout.setStyle("-fx-background-color: #3593ff;");
 
         return new Scene(overallLayout, 800, 600);
     }
