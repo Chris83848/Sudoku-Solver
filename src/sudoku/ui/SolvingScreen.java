@@ -33,6 +33,21 @@ public class SolvingScreen {
         title.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-text-fill: #000000;");
         title.setAlignment(Pos.CENTER);
 
+        // Create back button to go back to home screen
+        Button backButton = new Button("Back");
+
+        backButton.setStyle("-fx-font-size: 14; -fx-background-color: transparent; -fx-text-fill: #00264d; -fx-font-weight: bold; -fx-font-family: 'Courier New';");
+        backButton.setOnMouseEntered(e -> backButton.setUnderline(true));
+        backButton.setOnMouseExited(e -> backButton.setUnderline(false));
+
+        backButton.setOnAction(e -> {
+            if (custom) {
+                solve.setScene(new LoadPuzzleScreen().getScene(solve));
+            } else {
+                solve.setScene(new DifficultySelectionScreen().getScene(solve));
+            }
+        });
+
         // Make copy of puzzle to then make solved puzzle from it
         int[][] tempPuzzle = new int[9][9];
         for (int i = 0; i < 9; i++) {
@@ -265,7 +280,15 @@ public class SolvingScreen {
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: #3593ff;");
 
-        return new Scene(layout, 800, 600);
+        // Create Pane for back button
+        AnchorPane anchoredBackButton = new AnchorPane(backButton);
+        AnchorPane.setTopAnchor(backButton, 10.0);
+        AnchorPane.setLeftAnchor(backButton, 10.0);
+
+        StackPane root = new StackPane();
+        root.getChildren().addAll(layout, anchoredBackButton);
+
+        return new Scene(root, 800, 600);
     }
 
 
