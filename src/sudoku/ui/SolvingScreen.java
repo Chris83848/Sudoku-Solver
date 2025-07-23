@@ -562,6 +562,12 @@ public class SolvingScreen {
         recursionButton.setStyle("-fx-font-size: 12;");
         buttonColumn.getChildren().add(recursionButton);
 
+        // Create human button and format
+        Button humanButton = new Button("Solve Humanly");
+        humanButton.setPrefSize(80, 40);
+        humanButton.setStyle("-fx-font-size: 12;");
+        buttonColumn.getChildren().add(humanButton);
+
         // Solves by recursion when clicked
         recursionButton.setOnAction(e -> {
 
@@ -575,7 +581,7 @@ public class SolvingScreen {
             resetPuzzle.setDisable(true);
             hintButton.setDisable(true);
             recursionButton.setDisable(true);
-
+            humanButton.setDisable(true);
 
             // Recursively solve puzzle in real time
             resetPuzzle();
@@ -593,16 +599,11 @@ public class SolvingScreen {
                 resetPuzzle.setDisable(false);
                 hintButton.setDisable(false);
                 recursionButton.setDisable(false);
+                humanButton.setDisable(false);
             }).start();
 
             // insert ending
         });
-
-        // Create human button and format
-        Button humanButton = new Button("Solve Humanly");
-        humanButton.setPrefSize(80, 40);
-        humanButton.setStyle("-fx-font-size: 12;");
-        buttonColumn.getChildren().add(humanButton);
 
         // Solves humanly when clicked
         humanButton.setOnAction(e -> {
@@ -695,6 +696,7 @@ public class SolvingScreen {
     private void human(int[][] solvedPuzzle) {
         while (!checkCompletion(solvedPuzzle)) {
             hint();
+            sleep(1000);
 
             Platform.runLater(() -> {
                 revealCell(selectedCell, solvedPuzzle);
