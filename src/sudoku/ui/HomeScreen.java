@@ -2,11 +2,13 @@ package sudoku.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class HomeScreen {
@@ -31,7 +33,7 @@ public class HomeScreen {
         );
 
         // Create buttons for solving different puzzles and stylize
-        Button loadButton = new Button("Solve Own Puzzle");
+        Button loadButton = new Button("Solve Custom Puzzle");
         Button generateButton = new Button("Solve Random Puzzle");
 
         String buttonStyle =
@@ -51,7 +53,12 @@ public class HomeScreen {
         generateButton.setOnAction(e -> {
             DifficultySelectionScreen difficultySelectionScreen = new DifficultySelectionScreen();
             home.setScene(difficultySelectionScreen.getScene(home));
-            home.setMaximized(true);
+
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            home.setX(screenBounds.getMinX());
+            home.setY(screenBounds.getMinY());
+            home.setWidth(screenBounds.getWidth());
+            home.setHeight(screenBounds.getHeight());
         });
 
         // Call load screen when load button is clicked
