@@ -77,7 +77,7 @@ public class HomeScreen {
         VBox layout = new VBox(40, titleLabel, subheadingLabel, buttonBox);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(60));
-        layout.setStyle("-fx-background-color: #3593ff;"); // Blue background
+        layout.setStyle("-fx-background-color: #3593ff;");
 
         return new Scene(layout, 800, 600);
     }

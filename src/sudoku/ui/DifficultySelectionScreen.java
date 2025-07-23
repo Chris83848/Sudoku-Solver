@@ -70,7 +70,7 @@ public class DifficultySelectionScreen {
         layout.setPadding(new Insets(40));
 
         StackPane root = new StackPane(layout);
-        root.setStyle("-fx-background-color: #3593ff;"); // Soft Azure
+        root.setStyle("-fx-background-color: #3593ff;");
 
         return new Scene(root, 800, 600);
     }
