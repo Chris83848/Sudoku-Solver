@@ -133,7 +133,7 @@ public class SolvingScreen {
             Button numButton = new Button(String.valueOf(num));
             numButton.setPrefSize(60, 60);
             numButton.setStyle(
-                    "-fx-font-size: 18; " +
+                    "-fx-font-size: 24; " +
                             "-fx-background-color: white; " +
                             "-fx-text-fill: black; " +
                             "-fx-border-color: #7cfeff; " +
@@ -142,7 +142,7 @@ public class SolvingScreen {
             );
 
             numButton.setOnMouseEntered(eh -> numButton.setStyle(
-                    "-fx-font-size: 18; " +
+                    "-fx-font-size: 24; " +
                             "-fx-background-color: #E0F7FF; " +
                             "-fx-text-fill: black; " +
                             "-fx-border-color: #7cfeff; " +
@@ -151,7 +151,7 @@ public class SolvingScreen {
             ));
 
             numButton.setOnMouseExited(eh -> numButton.setStyle(
-                    "-fx-font-size: 18; " +
+                    "-fx-font-size: 24; " +
                             "-fx-background-color: white; " +
                             "-fx-text-fill: black; " +
                             "-fx-border-color: #7cfeff; " +
@@ -198,7 +198,7 @@ public class SolvingScreen {
         Button clearButton = new Button("X");
         clearButton.setPrefSize(60, 60);
         clearButton.setStyle(
-                "-fx-font-size: 20; " +
+                "-fx-font-size: 24; " +
                         "-fx-text-fill: red; " +
                         "-fx-background-color: white; " +
                         "-fx-font-family: 'Courier New'; " +
@@ -207,7 +207,7 @@ public class SolvingScreen {
                         "-fx-background-radius: 3;"
         );
         clearButton.setOnMouseEntered(eh -> clearButton.setStyle(
-                "-fx-font-size: 20; " +
+                "-fx-font-size: 24; " +
                         "-fx-text-fill: red; " +
                         "-fx-background-color: #ffd6d6; " +
                         "-fx-font-family: 'Courier New'; " +
@@ -217,7 +217,7 @@ public class SolvingScreen {
         ));
 
         clearButton.setOnMouseExited(eh -> clearButton.setStyle(
-                "-fx-font-size: 20; " +
+                "-fx-font-size: 24; " +
                         "-fx-text-fill: red; " +
                         "-fx-background-color: white; " +
                         "-fx-font-family: 'Courier New'; " +
@@ -253,7 +253,7 @@ public class SolvingScreen {
         // Format middle layout
         HBox middleLayout = new HBox(30, board, buttonColumn);
         middleLayout.setAlignment(Pos.CENTER);
-        middleLayout.setPadding(new Insets(0, 0, 0, 100));
+        middleLayout.setPadding(new Insets(0, 0, 0, 210));
 
         // Wrap everything in vertical layout
         VBox layout = new VBox(20, middleLayout, numberPad);
@@ -552,55 +552,87 @@ public class SolvingScreen {
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 3);" +
                 "-fx-cursor: hand;";
 
+        VBox checkButtons = new VBox();
+        checkButtons.setPadding(new Insets(0, 0, 0, 0));
+
         // Create check cell button and format
         Button checkCell = new Button("Check Cell");
         checkCell.setPrefSize(160, 40);
         checkCell.setStyle(style);
-        buttonColumn.getChildren().add(checkCell);
 
         // Check cell correctness when clicked
         checkCell.setOnAction(e -> {
             checkCell(selectedCell, solvedPuzzle);
         });
 
+        checkButtons.getChildren().add(checkCell);
+
         // Create check puzzle button and format
         Button checkPuzzle = new Button("Check Puzzle");
         checkPuzzle.setPrefSize(160, 40);
         checkPuzzle.setStyle(style);
-        buttonColumn.getChildren().add(checkPuzzle);
 
         // Check puzzle correctness when clicked
         checkPuzzle.setOnAction(e -> {
             checkPuzzle(solvedPuzzle);
         });
 
+        checkButtons.getChildren().add(checkPuzzle);
+
+        checkButtons.setSpacing(10);
+
+        buttonColumn.getChildren().add(checkButtons);
+
+        VBox revealButtons = new VBox();
+        revealButtons.setPadding(new Insets(20, 0, 0, 0));
+
         // Create reveal cell button and format
         Button revealCell = new Button("Reveal Cell");
         revealCell.setPrefSize(160, 40);
         revealCell.setStyle(style);
-        buttonColumn.getChildren().add(revealCell);
 
         // Reveal selected cell when clicked
         revealCell.setOnAction(e -> {
             revealCell(selectedCell, solvedPuzzle);
         });
 
+        revealButtons.getChildren().add(revealCell);
+
         // Create reveal puzzle button and format
         Button revealPuzzle = new Button("Reveal Puzzle");
         revealPuzzle.setPrefSize(160, 40);
         revealPuzzle.setStyle(style);
-        buttonColumn.getChildren().add(revealPuzzle);
 
         // Reveal puzzle when clicked
         revealPuzzle.setOnAction(e -> {
             revealPuzzle(solvedPuzzle);
         });
 
+        revealButtons.getChildren().add(revealPuzzle);
+
+        revealButtons.setSpacing(10);
+
+        buttonColumn.getChildren().add(revealButtons);
+
+        VBox utilityButtons = new VBox();
+        utilityButtons.setPadding(new Insets(20, 0, 0, 0));
+
+        // Create hint button and format
+        Button hintButton = new Button("Hint");
+        hintButton.setPrefSize(160, 40);
+        hintButton.setStyle(style);
+
+        // Show next easy cell to solve when clicked
+        hintButton.setOnAction(e -> {
+            hint();
+        });
+
+        utilityButtons.getChildren().add(hintButton);
+
         // Create reset puzzle button and format
         Button resetPuzzle = new Button("Reset Puzzle");
         resetPuzzle.setPrefSize(160, 40);
         resetPuzzle.setStyle(style);
-        buttonColumn.getChildren().add(resetPuzzle);
 
         // Reset puzzle when clicked
         resetPuzzle.setOnAction(e -> {
@@ -608,28 +640,32 @@ public class SolvingScreen {
             selectedCell = null;
         });
 
-        // Create hint button and format
-        Button hintButton = new Button("Hint");
-        hintButton.setPrefSize(160, 40);
-        hintButton.setStyle(style);
-        buttonColumn.getChildren().add(hintButton);
+        utilityButtons.getChildren().add(resetPuzzle);
 
-        // Show next easy cell to solve when clicked
-        hintButton.setOnAction(e -> {
-            hint();
-        });
+        utilityButtons.setSpacing(10);
+
+        buttonColumn.getChildren().add(utilityButtons);
+
+        VBox solvingButtons = new VBox();
+        solvingButtons.setPadding(new Insets(20, 0, 0, 0));
 
         // Create recursion button and format
         Button recursionButton = new Button("Solve Recursively");
         recursionButton.setPrefSize(190, 40);
         recursionButton.setStyle(style);
-        buttonColumn.getChildren().add(recursionButton);
+
+        solvingButtons.getChildren().add(recursionButton);
 
         // Create human button and format
         Button humanButton = new Button("Solve Humanly");
         humanButton.setPrefSize(190, 40);
         humanButton.setStyle(style);
-        buttonColumn.getChildren().add(humanButton);
+
+        solvingButtons.getChildren().add(humanButton);
+
+        solvingButtons.setSpacing(10);
+
+        buttonColumn.getChildren().add(solvingButtons);
 
         // Solves by recursion when clicked
         recursionButton.setOnAction(e -> {
@@ -701,9 +737,10 @@ public class SolvingScreen {
                 recursionButton.setDisable(false);
                 humanButton.setDisable(false);
             }).start();
-        });
 
-        // insert ending
+            // insert ending
+        });
+        buttonColumn.setPadding(new Insets(20, 0, 0, 0));
     }
 
     // Returns the coordinates of a cell
