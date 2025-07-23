@@ -129,10 +129,35 @@ public class SolvingScreen {
         // Create buttons for numbers 1-9 and for number pad
         for (int num = 1; num <= 9; num++) {
 
-            // Create button
+            // Create button and stylize
             Button numButton = new Button(String.valueOf(num));
             numButton.setPrefSize(60, 60);
-            numButton.setStyle("-fx-font-size: 18;");
+            numButton.setStyle(
+                    "-fx-font-size: 18; " +
+                            "-fx-background-color: white; " +
+                            "-fx-text-fill: black; " +
+                            "-fx-border-color: #7cfeff; " +
+                            "-fx-border-radius: 3; " +
+                            "-fx-background-radius: 3;"
+            );
+
+            numButton.setOnMouseEntered(eh -> numButton.setStyle(
+                    "-fx-font-size: 18; " +
+                            "-fx-background-color: #E0F7FF; " +
+                            "-fx-text-fill: black; " +
+                            "-fx-border-color: #7cfeff; " +
+                            "-fx-border-radius: 3; " +
+                            "-fx-background-radius: 3;"
+            ));
+
+            numButton.setOnMouseExited(eh -> numButton.setStyle(
+                    "-fx-font-size: 18; " +
+                            "-fx-background-color: white; " +
+                            "-fx-text-fill: black; " +
+                            "-fx-border-color: #7cfeff; " +
+                            "-fx-border-radius: 3; " +
+                            "-fx-background-radius: 3;"
+            ));
 
             // Determine coordinates for number pad
             int row = (num <= 5) ? 0 : 1;
@@ -169,10 +194,37 @@ public class SolvingScreen {
             numberPad.add(numButton, column, row);
         }
 
-        // Create clear button and add to last slot in number pad
+        // Create clear button, stylize, and add to last slot in number pad
         Button clearButton = new Button("X");
         clearButton.setPrefSize(60, 60);
-        clearButton.setStyle("-fx-font-size: 20; -fx-text-fill: red;");
+        clearButton.setStyle(
+                "-fx-font-size: 20; " +
+                        "-fx-text-fill: red; " +
+                        "-fx-background-color: white; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-border-color: #DC143C; " +
+                        "-fx-border-radius: 3; " +
+                        "-fx-background-radius: 3;"
+        );
+        clearButton.setOnMouseEntered(eh -> clearButton.setStyle(
+                "-fx-font-size: 20; " +
+                        "-fx-text-fill: red; " +
+                        "-fx-background-color: #ffd6d6; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-border-color: #DC143C; " +
+                        "-fx-border-radius: 3; " +
+                        "-fx-background-radius: 3;"
+        ));
+
+        clearButton.setOnMouseExited(eh -> clearButton.setStyle(
+                "-fx-font-size: 20; " +
+                        "-fx-text-fill: red; " +
+                        "-fx-background-color: white; " +
+                        "-fx-font-family: 'Courier New'; " +
+                        "-fx-border-color: #DC143C; " +
+                        "-fx-border-radius: 3; " +
+                        "-fx-background-radius: 3;"
+        ));
 
         // Delete number from highlighted square when clicked
         clearButton.setOnAction(e -> {
@@ -206,6 +258,7 @@ public class SolvingScreen {
         // Wrap everything in vertical layout
         VBox layout = new VBox(20, middleLayout, numberPad);
         layout.setAlignment(Pos.CENTER);
+        layout.setStyle("-fx-background-color: #3593ff;");
 
         return new Scene(layout, 800, 600);
     }
@@ -489,10 +542,20 @@ public class SolvingScreen {
 
     private void utilityButtonCreation(VBox buttonColumn, int[][] solvedPuzzle) {
 
+        // Create stylizations for each button
+        String style = "-fx-font-size: 16px;" +
+                "-fx-font-family: 'Verdana';" +
+                "-fx-background-color: #000000;" +
+                "-fx-text-fill: white;" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 12 24;" +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 3);" +
+                "-fx-cursor: hand;";
+
         // Create check cell button and format
         Button checkCell = new Button("Check Cell");
-        checkCell.setPrefSize(80, 40);
-        checkCell.setStyle("-fx-font-size: 12;");
+        checkCell.setPrefSize(160, 40);
+        checkCell.setStyle(style);
         buttonColumn.getChildren().add(checkCell);
 
         // Check cell correctness when clicked
@@ -502,8 +565,8 @@ public class SolvingScreen {
 
         // Create check puzzle button and format
         Button checkPuzzle = new Button("Check Puzzle");
-        checkPuzzle.setPrefSize(80, 40);
-        checkPuzzle.setStyle("-fx-font-size: 12;");
+        checkPuzzle.setPrefSize(160, 40);
+        checkPuzzle.setStyle(style);
         buttonColumn.getChildren().add(checkPuzzle);
 
         // Check puzzle correctness when clicked
@@ -513,8 +576,8 @@ public class SolvingScreen {
 
         // Create reveal cell button and format
         Button revealCell = new Button("Reveal Cell");
-        revealCell.setPrefSize(80, 40);
-        revealCell.setStyle("-fx-font-size: 12;");
+        revealCell.setPrefSize(160, 40);
+        revealCell.setStyle(style);
         buttonColumn.getChildren().add(revealCell);
 
         // Reveal selected cell when clicked
@@ -524,8 +587,8 @@ public class SolvingScreen {
 
         // Create reveal puzzle button and format
         Button revealPuzzle = new Button("Reveal Puzzle");
-        revealPuzzle.setPrefSize(80, 40);
-        revealPuzzle.setStyle("-fx-font-size: 12;");
+        revealPuzzle.setPrefSize(160, 40);
+        revealPuzzle.setStyle(style);
         buttonColumn.getChildren().add(revealPuzzle);
 
         // Reveal puzzle when clicked
@@ -535,8 +598,8 @@ public class SolvingScreen {
 
         // Create reset puzzle button and format
         Button resetPuzzle = new Button("Reset Puzzle");
-        resetPuzzle.setPrefSize(80, 40);
-        resetPuzzle.setStyle("-fx-font-size: 12;");
+        resetPuzzle.setPrefSize(160, 40);
+        resetPuzzle.setStyle(style);
         buttonColumn.getChildren().add(resetPuzzle);
 
         // Reset puzzle when clicked
@@ -547,8 +610,8 @@ public class SolvingScreen {
 
         // Create hint button and format
         Button hintButton = new Button("Hint");
-        hintButton.setPrefSize(80, 40);
-        hintButton.setStyle("-fx-font-size: 12;");
+        hintButton.setPrefSize(160, 40);
+        hintButton.setStyle(style);
         buttonColumn.getChildren().add(hintButton);
 
         // Show next easy cell to solve when clicked
@@ -557,15 +620,15 @@ public class SolvingScreen {
         });
 
         // Create recursion button and format
-        Button recursionButton = new Button("Solve by Recursion");
-        recursionButton.setPrefSize(80, 40);
-        recursionButton.setStyle("-fx-font-size: 12;");
+        Button recursionButton = new Button("Solve Recursively");
+        recursionButton.setPrefSize(190, 40);
+        recursionButton.setStyle(style);
         buttonColumn.getChildren().add(recursionButton);
 
         // Create human button and format
         Button humanButton = new Button("Solve Humanly");
-        humanButton.setPrefSize(80, 40);
-        humanButton.setStyle("-fx-font-size: 12;");
+        humanButton.setPrefSize(190, 40);
+        humanButton.setStyle(style);
         buttonColumn.getChildren().add(humanButton);
 
         // Solves by recursion when clicked
