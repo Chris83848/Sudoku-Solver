@@ -69,7 +69,12 @@ public class HomeScreen {
         loadButton.setOnAction(e -> {
             LoadPuzzleScreen loadPuzzleScreen = new LoadPuzzleScreen();
             home.setScene(loadPuzzleScreen.getScene(home));
-            home.setMaximized(true);
+
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            home.setX(screenBounds.getMinX());
+            home.setY(screenBounds.getMinY());
+            home.setWidth(screenBounds.getWidth());
+            home.setHeight(screenBounds.getHeight());
         });
 
         // Quit application when exit button is clicked
