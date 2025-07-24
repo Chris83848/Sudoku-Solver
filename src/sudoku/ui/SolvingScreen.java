@@ -280,13 +280,15 @@ public class SolvingScreen {
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: #3593ff;");
 
-        // Create Pane for back button
-        AnchorPane anchoredBackButton = new AnchorPane(backButton);
+        // Create AnchorPane for the back button
+        AnchorPane anchor = new AnchorPane(backButton);
         AnchorPane.setTopAnchor(backButton, 10.0);
         AnchorPane.setLeftAnchor(backButton, 10.0);
+        anchor.setPickOnBounds(false);
 
-        StackPane root = new StackPane();
-        root.getChildren().addAll(layout, anchoredBackButton);
+        // Create final layout
+        StackPane root = new StackPane(layout, anchor);
+        root.setStyle("-fx-background-color: #3593ff;");
 
         return new Scene(root, 800, 600);
     }
