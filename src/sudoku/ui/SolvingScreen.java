@@ -268,7 +268,7 @@ public class SolvingScreen {
         buttonColumn.setAlignment(Pos.TOP_CENTER); // align buttons to top-center
 
         // Add all utility buttons
-        utilityButtonCreation(buttonColumn, solvedPuzzle);
+        utilityButtonCreation(buttonColumn, backButton, solvedPuzzle);
 
         // Format middle layout
         HBox middleLayout = new HBox(30, board, buttonColumn);
@@ -571,7 +571,7 @@ public class SolvingScreen {
         return currentPuzzle;
     }
 
-    private void utilityButtonCreation(VBox buttonColumn, int[][] solvedPuzzle) {
+    private void utilityButtonCreation(VBox buttonColumn, Button back, int[][] solvedPuzzle) {
 
         // Create stylizations for each button
         String style = "-fx-font-size: 16px;" +
@@ -712,6 +712,7 @@ public class SolvingScreen {
             hintButton.setDisable(true);
             recursionButton.setDisable(true);
             humanButton.setDisable(true);
+            back.setDisable(true);
 
             // Recursively solve puzzle in real time
             resetPuzzle();
@@ -730,6 +731,7 @@ public class SolvingScreen {
                 hintButton.setDisable(false);
                 recursionButton.setDisable(false);
                 humanButton.setDisable(false);
+                back.setDisable(false);
             }).start();
 
             // insert ending
@@ -749,6 +751,7 @@ public class SolvingScreen {
             hintButton.setDisable(true);
             recursionButton.setDisable(true);
             humanButton.setDisable(true);
+            back.setDisable(true);
 
 
             // Humanly solve puzzle in real time
@@ -767,6 +770,7 @@ public class SolvingScreen {
                 hintButton.setDisable(false);
                 recursionButton.setDisable(false);
                 humanButton.setDisable(false);
+                back.setDisable(false);
             }).start();
 
             // insert ending
