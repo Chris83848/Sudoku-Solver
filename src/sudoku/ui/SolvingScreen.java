@@ -435,6 +435,7 @@ public class SolvingScreen {
     // Reveal correct value inside of empty cell
     private void revealCell(Pane cell, int[][] solvedBoard) {
         if (findCellType(cell).equals("free")) {
+            cell.getChildren().clear();
             int[] coords = findCellCoordinates(cell);
             int numValue = solvedBoard[coords[0]][coords[1]];
             String printValue = String.valueOf(numValue);
