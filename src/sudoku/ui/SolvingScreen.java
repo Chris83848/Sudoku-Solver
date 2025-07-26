@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sudoku.logic.SudokuCandidatesManager;
 import sudoku.logic.SudokuSolverApplication;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 public class SolvingScreen {
 
@@ -213,7 +215,7 @@ public class SolvingScreen {
 
 
                     if (checkCompletion(solvedPuzzle)) {
-
+                        Completion(solve, difficulty, numberPad);
                     }
                 }
             });
@@ -277,7 +279,7 @@ public class SolvingScreen {
         buttonColumn.setAlignment(Pos.TOP_CENTER); // align buttons to top-center
 
         // Add all utility buttons
-        utilityButtonCreation(buttonColumn, numberPad, backButton, solvedPuzzle);
+        utilityButtonCreation(buttonColumn, numberPad, backButton, solvedPuzzle, solve, difficulty);
 
         // Format middle layout
         HBox middleLayout = new HBox(30, board, buttonColumn);
@@ -442,7 +444,7 @@ public class SolvingScreen {
     }
 
     // Reveal correct value inside of empty cell
-    private void revealCell(Pane cell, int[][] solvedBoard, GridPane numPad) {
+    private void revealCell(Pane cell, int[][] solvedBoard, GridPane numPad, Stage solve, String difficulty) {
         if (findCellType(cell).equals("free")) {
             cell.getChildren().clear();
             int[] coords = findCellCoordinates(cell);
@@ -462,17 +464,17 @@ public class SolvingScreen {
             cell.setUserData(dataMap);
 
             if (checkCompletion(solvedBoard)) {
-
+                Completion(solve, difficulty, numPad);
             }
         }
     }
 
     // Reveal entire puzzle using revealCell method
-    private void revealPuzzle(int[][] solvedBoard, GridPane numPad) {
+    private void revealPuzzle(int[][] solvedBoard, GridPane numPad, Stage solve, String difficulty) {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane cell = cells[row][column];
-                revealCell(cell, solvedBoard, numPad);
+                revealCell(cell, solvedBoard, numPad, solve, difficulty);
             }
         }
     }
@@ -588,7 +590,7 @@ public class SolvingScreen {
         return currentPuzzle;
     }
 
-    private void utilityButtonCreation(VBox buttonColumn, GridPane pad, Button back, int[][] solvedPuzzle) {
+    private void utilityButtonCreation(VBox buttonColumn, GridPane pad, Button back, int[][] solvedPuzzle, Stage solve, String difficulty) {
 
         // Create stylizations for each button
         String style = "-fx-font-size: 16px;" +
@@ -641,7 +643,7 @@ public class SolvingScreen {
 
         // Reveal selected cell when clicked
         revealCell.setOnAction(e -> {
-            revealCell(selectedCell, solvedPuzzle, pad);
+            revealCell(selectedCell, solvedPuzzle, pad, solve, difficulty);
         });
 
         revealButtons.getChildren().add(revealCell);
@@ -653,7 +655,7 @@ public class SolvingScreen {
 
         // Reveal puzzle when clicked
         revealPuzzle.setOnAction(e -> {
-            revealPuzzle(solvedPuzzle, pad);
+            revealPuzzle(solvedPuzzle, pad, solve, difficulty);
         });
 
         revealButtons.getChildren().add(revealPuzzle);
@@ -763,7 +765,7 @@ public class SolvingScreen {
 
             }).start();
 
-            // insert ending
+            Completion(solve, difficulty, pad);
         });
 
         // Solves humanly when clicked
@@ -791,7 +793,7 @@ public class SolvingScreen {
             // Humanly solve puzzle in real time
             resetPuzzle(pad);
             new Thread(() -> {
-                human(solvedPuzzle, pad);
+                human(solvedPuzzle, pad, solve, difficulty);
 
                 isSolving = false;
 
@@ -813,7 +815,7 @@ public class SolvingScreen {
 
             }).start();
 
-            // insert ending
+            Completion(solve, difficulty, pad);
         });
         buttonColumn.setPadding(new Insets(20, 0, 0, 0));
     }
@@ -868,13 +870,13 @@ public class SolvingScreen {
         }
     }
 
-    private void human(int[][] solvedPuzzle, GridPane numPad) {
+    private void human(int[][] solvedPuzzle, GridPane numPad, Stage solve, String difficulty) {
         while (!checkCompletion(solvedPuzzle)) {
             hint();
             sleep(1000);
 
             Platform.runLater(() -> {
-                revealCell(selectedCell, solvedPuzzle, numPad);
+                revealCell(selectedCell, solvedPuzzle, numPad, solve, difficulty);
             });
             sleep(1000);
         }
@@ -939,6 +941,7 @@ public class SolvingScreen {
         });
     }
 
+    // Grey out or ungrey out numbers that have been used on number pad
     public void greyOut(GridPane numPad) {
         Map<String, Integer> countMap = new HashMap<>();
         for (int i = 0; i < 9; i++) {
@@ -1013,5 +1016,74 @@ public class SolvingScreen {
             }
         }
     }
+
+    public void Completion(Stage solve, String difficulty, GridPane numPad) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(solve);
+        popupStage.setTitle("Puzzle Complete!");
+
+        Label message = new Label("Congratulations! You solved a " + difficulty + " puzzle!");
+        message.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #000000;");
+
+        Button homeButton = new Button("Return home");
+        Button resetButton = new Button("Retry puzzle");
+        Button difficultyButton = new Button("Choose new puzzle");
+        Button customButton = new Button("Load custom puzzle");
+        Button quitButton = new Button("Close Application");
+
+        String buttonStyle =
+                "-fx-font-size: 18px;" +
+                        "-fx-font-family: 'Verdana';" +
+                        "-fx-background-color: black;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-padding: 12 24;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 3);" +
+                        "-fx-cursor: hand;";
+
+        homeButton.setOnAction(e -> {
+            popupStage.close();
+            HomeScreen homeScreen = new HomeScreen();
+            solve.setScene(homeScreen.getScene(solve));
+        });
+        homeButton.setStyle(buttonStyle);
+
+        resetButton.setOnAction(e -> {
+            popupStage.close();
+            resetPuzzle(numPad);
+        });
+        resetButton.setStyle(buttonStyle);
+
+        difficultyButton.setOnAction(e -> {
+            popupStage.close();
+            DifficultySelectionScreen difficultySelectionScreen = new DifficultySelectionScreen();
+            solve.setScene(difficultySelectionScreen.getScene(solve));
+        });
+        difficultyButton.setStyle(buttonStyle);
+
+        customButton.setOnAction(e -> {
+            popupStage.close();
+            LoadPuzzleScreen loadPuzzleScreen = new LoadPuzzleScreen();
+            solve.setScene(loadPuzzleScreen.getScene(solve));
+        });
+        customButton.setStyle(buttonStyle);
+
+        quitButton.setOnAction(e -> {
+            Platform.exit();
+        });
+        quitButton.setStyle(buttonStyle);
+
+        VBox layout = new VBox(15, message, homeButton, resetButton, difficultyButton, quitButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(25));
+        layout.setStyle("-fx-background-color: #3593ff; -fx-border-color: #0096c9; -fx-border-width: 2px;");
+        layout.setPrefSize(600, 500);
+
+        popupStage.setScene(new Scene(layout));
+        popupStage.setResizable(false);
+        popupStage.show();
+    }
+
 }
 
