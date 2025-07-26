@@ -195,7 +195,6 @@ public class SudokuBoardGenerator {
     public static int[][] generateRandomSolvedBoard() {
         int[][] emptyBoard = new int[9][9];
         randomRecursion(emptyBoard, 0, 0);
-        System.out.println("Recursion worked");
         return emptyBoard;
     }
 
@@ -249,6 +248,7 @@ public class SudokuBoardGenerator {
         }
     }
 
+    // Recursion that randomizes number placements to best fill sudoku boards
     public static boolean randomRecursion(int[][] sudokuBoard, int i, int j) {
         if (j == 9) {
             j = 0;
