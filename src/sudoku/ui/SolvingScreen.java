@@ -268,7 +268,7 @@ public class SolvingScreen {
         buttonColumn.setAlignment(Pos.TOP_CENTER); // align buttons to top-center
 
         // Add all utility buttons
-        utilityButtonCreation(buttonColumn, backButton, solvedPuzzle);
+        utilityButtonCreation(buttonColumn, numberPad, backButton, solvedPuzzle);
 
         // Format middle layout
         HBox middleLayout = new HBox(30, board, buttonColumn);
@@ -571,7 +571,7 @@ public class SolvingScreen {
         return currentPuzzle;
     }
 
-    private void utilityButtonCreation(VBox buttonColumn, Button back, int[][] solvedPuzzle) {
+    private void utilityButtonCreation(VBox buttonColumn, GridPane pad, Button back, int[][] solvedPuzzle) {
 
         // Create stylizations for each button
         String style = "-fx-font-size: 16px;" +
@@ -713,6 +713,12 @@ public class SolvingScreen {
             recursionButton.setDisable(true);
             humanButton.setDisable(true);
             back.setDisable(true);
+            for (Node node : pad.getChildren()) {
+                if (node instanceof Button) {
+                    node.setDisable(true);  // or false to re-enable
+                }
+            }
+
 
             // Recursively solve puzzle in real time
             resetPuzzle();
@@ -732,6 +738,12 @@ public class SolvingScreen {
                 recursionButton.setDisable(false);
                 humanButton.setDisable(false);
                 back.setDisable(false);
+                for (Node node : pad.getChildren()) {
+                    if (node instanceof Button) {
+                        node.setDisable(false);  // or false to re-enable
+                    }
+                }
+
             }).start();
 
             // insert ending
@@ -752,6 +764,12 @@ public class SolvingScreen {
             recursionButton.setDisable(true);
             humanButton.setDisable(true);
             back.setDisable(true);
+            for (Node node : pad.getChildren()) {
+                if (node instanceof Button) {
+                    node.setDisable(true);  // or false to re-enable
+                }
+            }
+
 
 
             // Humanly solve puzzle in real time
@@ -771,6 +789,12 @@ public class SolvingScreen {
                 recursionButton.setDisable(false);
                 humanButton.setDisable(false);
                 back.setDisable(false);
+                for (Node node : pad.getChildren()) {
+                    if (node instanceof Button) {
+                        node.setDisable(false);  // or false to re-enable
+                    }
+                }
+
             }).start();
 
             // insert ending
