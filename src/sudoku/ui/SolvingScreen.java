@@ -491,6 +491,9 @@ public class SolvingScreen {
 
         // Create current puzzle with candidates
         int[][] currentPuzzle = findCurrentPuzzle();
+        if (SudokuSolverApplication.boardComplete(currentPuzzle)) {
+            return;
+        }
         ArrayList<Integer>[][] boardCandidates = new ArrayList[9][9];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
