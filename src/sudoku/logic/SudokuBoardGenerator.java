@@ -1,5 +1,7 @@
 package sudoku.logic;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class SudokuBoardGenerator {
 
@@ -192,30 +194,9 @@ public class SudokuBoardGenerator {
     //Randomly generates a solved sudoku board
     public static int[][] generateRandomSolvedBoard() {
         int[][] emptyBoard = new int[9][9];
-
-        ArrayList<Integer> topRow = new ArrayList<>();
-        topRow.add(1);
-        topRow.add(2);
-        topRow.add(3);
-        topRow.add(4);
-        topRow.add(5);
-        topRow.add(6);
-        topRow.add(7);
-        topRow.add(8);
-        topRow.add(9);
-        int length = topRow.size();
-
-        //Fill out top row of board randomly
-        for (int i = 0; i < 9; i++) {
-            Random random = new Random();
-            int randomIndex = random.nextInt(length);
-            emptyBoard[0][i] = topRow.get(randomIndex);
-            topRow.remove(randomIndex);
-            length--;
-        }
-
-        //Solves rest of board based off of complete top board and returns it
-        return SudokuSolverTechniques.solveRecursivelyHelper(emptyBoard, 1, 0);
+        randomRecursion(emptyBoard, 0, 0);
+        System.out.println("Recursion worked");
+        return emptyBoard;
     }
 
 
@@ -268,5 +249,34 @@ public class SudokuBoardGenerator {
         }
     }
 
+    public static boolean randomRecursion(int[][] sudokuBoard, int i, int j) {
+        if (j == 9) {
+            j = 0;
+            i++;
+        }
+        if (i == 9) {
+            return true;
+        }
 
+        if (sudokuBoard[i][j] == 0) {
+
+            List<Integer> digits = IntStream.rangeClosed(1, 9).boxed().collect(Collectors.toList());
+            Collections.shuffle(digits);
+
+            for (int num : digits) {
+                sudokuBoard[i][j] = num;
+                if (!SudokuSolverApplication.checkBoardError(sudokuBoard, i, j)) {
+                    if (randomRecursion(sudokuBoard, i, j + 1)) {
+                        return true;
+                    }
+                    sudokuBoard[i][j] = 0;
+                } else {
+                    sudokuBoard[i][j] = 0;
+                }
+            }
+            return false;
+        } else {
+            return randomRecursion(sudokuBoard, i, j + 1);
+        }
+    }
 }
