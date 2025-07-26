@@ -747,25 +747,27 @@ public class SolvingScreen {
 
                 isSolving = false;
 
-                // Reactivate buttons
-                checkCell.setDisable(false);
-                checkPuzzle.setDisable(false);
-                revealCell.setDisable(false);
-                revealPuzzle.setDisable(false);
-                resetPuzzle.setDisable(false);
-                hintButton.setDisable(false);
-                recursionButton.setDisable(false);
-                humanButton.setDisable(false);
-                back.setDisable(false);
-                for (Node node : pad.getChildren()) {
-                    if (node instanceof Button) {
-                        node.setDisable(false);  // or false to re-enable
+                Platform.runLater(() -> {
+                    // Reactivate buttons
+                    checkCell.setDisable(false);
+                    checkPuzzle.setDisable(false);
+                    revealCell.setDisable(false);
+                    revealPuzzle.setDisable(false);
+                    resetPuzzle.setDisable(false);
+                    hintButton.setDisable(false);
+                    recursionButton.setDisable(false);
+                    humanButton.setDisable(false);
+                    back.setDisable(false);
+                    for (Node node : pad.getChildren()) {
+                        if (node instanceof Button) {
+                            node.setDisable(false);  // or false to re-enable
+                        }
                     }
-                }
+                    Completion(solve, difficulty, pad);
+                });
 
             }).start();
 
-            Completion(solve, difficulty, pad);
         });
 
         // Solves humanly when clicked
@@ -812,10 +814,10 @@ public class SolvingScreen {
                         node.setDisable(false);  // or false to re-enable
                     }
                 }
+                Completion(solve, difficulty, pad);
 
             }).start();
 
-            Completion(solve, difficulty, pad);
         });
         buttonColumn.setPadding(new Insets(20, 0, 0, 0));
     }
