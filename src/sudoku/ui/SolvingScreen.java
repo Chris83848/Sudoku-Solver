@@ -26,6 +26,7 @@ public class SolvingScreen {
     private Pane[][] cells = new Pane[9][9];
     private Pane selectedCell = null;
     private boolean isSolving = false;
+
     public Scene getScene(Stage solve, int[][] puzzle, String difficulty, boolean custom) {
 
         // Create title of screen
@@ -106,6 +107,7 @@ public class SolvingScreen {
                         updateHighlights(wrapper, finalRow1, finalColumn1);
                     });
                     cells[row][column] = wrapper;
+                    cells[row][column].setAccessibleText(String.valueOf(value));
                     board.add(wrapper, column, row);
 
                 } else {
@@ -189,6 +191,7 @@ public class SolvingScreen {
 
                     // Clear cell
                     selectedCell.getChildren().clear();
+                    selectedCell.setAccessibleText(null);
 
                     // Replace with new number
                     Label numInput = new Label(numButton.getText());
@@ -201,8 +204,12 @@ public class SolvingScreen {
                     int currentRow = coords[0];
                     int currentColumn = coords[1];
                     selectedCell.getChildren().add(numInput);
+                    selectedCell.setAccessibleText(numButton.getText());
                     resetCells();
                     updateHighlights(selectedCell, currentRow, currentColumn);
+
+
+                    greyOut(numberPad);
 
 
                     if (checkCompletion(solvedPuzzle)) {
@@ -255,9 +262,11 @@ public class SolvingScreen {
                 resetCells();
                 addVisibleHighlights(coords[0], coords[1]);
                 selectedCell.getChildren().clear();
+                selectedCell.setAccessibleText(null);
                 selectedCell.setStyle("-fx-border-color: black;" +
                         "-fx-border-width: " + UIComponents.getBorderWidth(coords[0], coords[1]) + ";" +
                         "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
+                greyOut(numberPad);
             }
         });
         numberPad.add(clearButton, 4, 1);
@@ -433,7 +442,7 @@ public class SolvingScreen {
     }
 
     // Reveal correct value inside of empty cell
-    private void revealCell(Pane cell, int[][] solvedBoard) {
+    private void revealCell(Pane cell, int[][] solvedBoard, GridPane numPad) {
         if (findCellType(cell).equals("free")) {
             cell.getChildren().clear();
             int[] coords = findCellCoordinates(cell);
@@ -444,6 +453,8 @@ public class SolvingScreen {
             valueInput.setAlignment(Pos.CENTER);
             valueInput.setPrefSize(60, 60);
             cell.getChildren().add(valueInput);
+            cell.setAccessibleText(printValue);
+            greyOut(numPad);
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("coords", findCellCoordinates(cell));
@@ -457,25 +468,27 @@ public class SolvingScreen {
     }
 
     // Reveal entire puzzle using revealCell method
-    private void revealPuzzle(int[][] solvedBoard) {
+    private void revealPuzzle(int[][] solvedBoard, GridPane numPad) {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane cell = cells[row][column];
-                revealCell(cell, solvedBoard);
+                revealCell(cell, solvedBoard, numPad);
             }
         }
     }
 
     // Set puzzle back to original version
-    private void resetPuzzle() {
+    private void resetPuzzle(GridPane numPad) {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane cell = cells[row][column];
                 String dataType = findCellType(cell);
                 if (dataType.equals("free")) {
                     cell.getChildren().clear();
+                    cell.setAccessibleText(null);
                 } else if (dataType.equals("locked")) {
                     cell.getChildren().clear();
+                    cell.setAccessibleText(null);
                     Map<String, Object> dataMap = new HashMap<>();
                     dataMap.put("coords", findCellCoordinates(cell));
                     dataMap.put("type", "free");
@@ -483,6 +496,7 @@ public class SolvingScreen {
                 }
             }
         }
+        greyOut(numPad);
         resetCells();
         selectedCell = null;
     }
@@ -514,9 +528,9 @@ public class SolvingScreen {
         SudokuCandidatesManager.findCandidates(currentPuzzle, boardCandidates);
         if (SudokuSolverTechniques.nakedSingles(currentPuzzle, boardCandidates)) {
             hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
-        } else if (SudokuSolverTechniques.hiddenSingles(currentPuzzle, boardCandidates)){
+        } else if (SudokuSolverTechniques.hiddenSingles(currentPuzzle, boardCandidates)) {
             hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
-        } else if (SudokuSolverTechniques.pointingPairs(currentPuzzle, boardCandidates)){
+        } else if (SudokuSolverTechniques.pointingPairs(currentPuzzle, boardCandidates)) {
             hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
         } else if (SudokuSolverTechniques.nakedPairs(currentPuzzle, boardCandidates)) {
             hintCoordinate = findCoordinateChange(currentCopy, currentPuzzle);
@@ -627,7 +641,7 @@ public class SolvingScreen {
 
         // Reveal selected cell when clicked
         revealCell.setOnAction(e -> {
-            revealCell(selectedCell, solvedPuzzle);
+            revealCell(selectedCell, solvedPuzzle, pad);
         });
 
         revealButtons.getChildren().add(revealCell);
@@ -639,7 +653,7 @@ public class SolvingScreen {
 
         // Reveal puzzle when clicked
         revealPuzzle.setOnAction(e -> {
-            revealPuzzle(solvedPuzzle);
+            revealPuzzle(solvedPuzzle, pad);
         });
 
         revealButtons.getChildren().add(revealPuzzle);
@@ -670,7 +684,7 @@ public class SolvingScreen {
 
         // Reset puzzle when clicked
         resetPuzzle.setOnAction(e -> {
-            resetPuzzle();
+            resetPuzzle(pad);
             selectedCell = null;
         });
 
@@ -724,7 +738,7 @@ public class SolvingScreen {
 
 
             // Recursively solve puzzle in real time
-            resetPuzzle();
+            resetPuzzle(pad);
             int[][] currentPuzzle = findCurrentPuzzle();
             new Thread(() -> {
                 recursive(currentPuzzle, 0, 0);
@@ -774,11 +788,10 @@ public class SolvingScreen {
             }
 
 
-
             // Humanly solve puzzle in real time
-            resetPuzzle();
+            resetPuzzle(pad);
             new Thread(() -> {
-                human(solvedPuzzle);
+                human(solvedPuzzle, pad);
 
                 isSolving = false;
 
@@ -855,13 +868,13 @@ public class SolvingScreen {
         }
     }
 
-    private void human(int[][] solvedPuzzle) {
+    private void human(int[][] solvedPuzzle, GridPane numPad) {
         while (!checkCompletion(solvedPuzzle)) {
             hint();
             sleep(1000);
 
             Platform.runLater(() -> {
-                revealCell(selectedCell, solvedPuzzle);
+                revealCell(selectedCell, solvedPuzzle, numPad);
             });
             sleep(1000);
         }
@@ -926,4 +939,79 @@ public class SolvingScreen {
         });
     }
 
+    public void greyOut(GridPane numPad) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                String val = cells[i][j].getAccessibleText();
+                if (val != null && !val.isBlank()) {
+                    countMap.put(val, countMap.getOrDefault(val, 0) + 1);
+                }
+            }
+        }
+
+        for (Node node : numPad.getChildren()) {
+            if (node instanceof Button btn) {
+                String number = btn.getText();
+                if (number.equals("X")) {
+                    continue;
+                }
+                int count = countMap.getOrDefault(number, 0);
+                if (count >= 9) {
+                    // Grey out
+                    btn.setStyle(
+                            "-fx-font-size: 24; " +
+                                    "-fx-background-color: white; " +
+                                    "-fx-text-fill: grey; " +
+                                    "-fx-border-color: #7cfeff; " +
+                                    "-fx-border-radius: 3; " +
+                                    "-fx-background-radius: 3;"
+                    );
+                    btn.setOnMouseEntered(eh -> btn.setStyle(
+                            "-fx-font-size: 24; " +
+                                    "-fx-background-color: #E0F7FF; " +
+                                    "-fx-text-fill: grey; " +
+                                    "-fx-border-color: #7cfeff; " +
+                                    "-fx-border-radius: 3; " +
+                                    "-fx-background-radius: 3;"
+                    ));
+                    btn.setOnMouseExited(eh -> btn.setStyle(
+                            "-fx-font-size: 24; " +
+                                    "-fx-background-color: white; " +
+                                    "-fx-text-fill: grey; " +
+                                    "-fx-border-color: #7cfeff; " +
+                                    "-fx-border-radius: 3; " +
+                                    "-fx-background-radius: 3;"
+                    ));
+                } else {
+                    // Restore normal style
+                    btn.setStyle(
+                            "-fx-font-size: 24; " +
+                                    "-fx-background-color: white; " +
+                                    "-fx-text-fill: black; " +
+                                    "-fx-border-color: #7cfeff; " +
+                                    "-fx-border-radius: 3; " +
+                                    "-fx-background-radius: 3;"
+                    );
+                    btn.setOnMouseEntered(eh -> btn.setStyle(
+                            "-fx-font-size: 24; " +
+                                    "-fx-background-color: #E0F7FF; " +
+                                    "-fx-text-fill: black; " +
+                                    "-fx-border-color: #7cfeff; " +
+                                    "-fx-border-radius: 3; " +
+                                    "-fx-background-radius: 3;"
+                    ));
+                    btn.setOnMouseExited(eh -> btn.setStyle(
+                            "-fx-font-size: 24; " +
+                                    "-fx-background-color: white; " +
+                                    "-fx-text-fill: black; " +
+                                    "-fx-border-color: #7cfeff; " +
+                                    "-fx-border-radius: 3; " +
+                                    "-fx-background-radius: 3;"
+                    ));
+                }
+            }
+        }
+    }
 }
+
