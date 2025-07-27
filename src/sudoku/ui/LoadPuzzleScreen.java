@@ -35,6 +35,7 @@ public class LoadPuzzleScreen {
             load.setScene(new HomeScreen().getScene(load));
         });
 
+        // Create submit button and stylize
         Button submitButton = new Button("Submit");
         submitButton.setPrefSize(110, 40);
 
