@@ -1021,6 +1021,7 @@ public class SolvingScreen {
 
     public void Completion(Stage solve, String difficulty, GridPane numPad) {
         Stage popupStage = new Stage();
+        popupStage.setOnCloseRequest(event -> event.consume());
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.initOwner(solve);
         popupStage.setTitle("Puzzle Complete!");
