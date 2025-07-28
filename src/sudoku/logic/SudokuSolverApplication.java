@@ -5,8 +5,7 @@ import java.util.ArrayList;
 public class SudokuSolverApplication {
     // Returns solved board using recursion.
     public static int[][] solveRecursively(int[][] sudokuBoard) {
-        int[][] solvedBoard = SudokuSolverTechniques.solveRecursivelyHelper(sudokuBoard, 0, 0);
-        return solvedBoard;
+        return SudokuSolverTechniques.solveRecursivelyHelper(sudokuBoard, 0, 0);
     }
 
     // Returns solved board, or as much of it as possible, using human techniques.
@@ -113,11 +112,7 @@ public class SudokuSolverApplication {
 
     // Returns whether cell at given coordinates is valid in its row, column, and grid.
     public static boolean checkBoardError(int[][] board, int i, int j) {
-        if (checkColumnError(board, i, j) || checkRowError(board, i, j) || checkGridError(board, i, j)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (checkColumnError(board, i, j) || checkRowError(board, i, j) || checkGridError(board, i, j));
     }
 
     // Returns whether cell at given coordinates is valid in its grid.

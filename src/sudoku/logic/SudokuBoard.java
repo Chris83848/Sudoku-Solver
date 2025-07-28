@@ -3,7 +3,6 @@ package sudoku.logic;
 // This class holds a sudoku board and its related methods.
 public class SudokuBoard {
     private static int[][] board;
-    private String difficulty;
 
     // Constructor
     public SudokuBoard(int[][] unsolvedBoard) {
@@ -12,11 +11,7 @@ public class SudokuBoard {
 
     // Returns whether board is a valid and solvable puzzle
     public static boolean isValid() {
-        if (isSolvable() && isCorrect()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (isSolvable() && isCorrect());
     }
 
     // Returns whether board is a solvable puzzle

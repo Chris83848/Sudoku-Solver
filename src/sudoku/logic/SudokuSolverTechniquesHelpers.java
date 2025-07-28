@@ -32,10 +32,9 @@ public class SudokuSolverTechniquesHelpers {
 
     // Returns whether a candidate appears only once in the given row, column, or grid.
     public static boolean hiddenSingleFound(int[][] sudokuBoard, ArrayList<Integer>[][] candidates, int i, int j, int num) {
-        if (countByGrid(sudokuBoard, candidates, i, j, num) == 1 || countByRow(sudokuBoard, candidates, i, num) == 1 || countByColumn(sudokuBoard, candidates, j, num) == 1) {
-            return true;
-        }
-        return false;
+        return (countByGrid(sudokuBoard, candidates, i, j, num) == 1 ||
+                countByRow(sudokuBoard, candidates, i, num) == 1 ||
+                countByColumn(sudokuBoard, candidates, j, num) == 1);
     }
 
 

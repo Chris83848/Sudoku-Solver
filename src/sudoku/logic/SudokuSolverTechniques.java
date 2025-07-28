@@ -80,7 +80,6 @@ public class SudokuSolverTechniques {
                             sudokuBoard[i][j] = candidates[i][j].get(index);
                             SudokuCandidatesManager.updateCandidates(sudokuBoard, candidates, i, j);
                             changeMade = true;
-                            // return changeMade here?
                         }
                     }
                 }

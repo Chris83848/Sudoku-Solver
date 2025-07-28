@@ -161,7 +161,7 @@ public class SudokuBoardGenerator {
         return switch (randomNum) {
             case 1 -> findRotationalCell(row, column);
             default -> findSpiralCell(row, column);
-            //Hard symmetry: rotational, asymmetric, spiral
+            // Hard symmetry: rotational, asymmetric, spiral
         };
     }
 
