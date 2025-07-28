@@ -11,27 +11,27 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sudoku.logic.SudokuBoardGenerator;
 
+// This class holds the needed methods for showing and working the difficulty selection screen of the application.
 public class DifficultySelectionScreen {
-
+    // Show difficulty selection screen.
     public Scene getScene(Stage difficulties) {
-
-        // Create title and stylize
+        // Create title and stylize.
         Label label = new Label("Select Difficulty");
         label.setStyle("-fx-font-size: 36px; -fx-font-family: 'Segoe UI'; -fx-text-fill: #000000; -fx-font-weight: bold");
 
-        // Create buttons for different difficulties
+        // Create buttons for different difficulties.
         Button easyButton = new Button("Easy");
         Button mediumButton = new Button("Medium");
         Button hardButton = new Button("Hard");
         Button backButton = new Button("Back");
 
-        // Style buttons
+        // Stylize buttons.
         styleButton(easyButton);
         styleButton(mediumButton);
         styleButton(hardButton);
         styleButton(backButton);
 
-        // Create easy sudoku puzzle and send to solving screen
+        // Create easy sudoku puzzle and send to solving screen when easy button is clicked.
         easyButton.setOnAction(e -> {
             int[][] easyPuzzle = SudokuBoardGenerator.generateEasyBoardPuzzle();
             SolvingScreen solvingScreen = new SolvingScreen();
@@ -39,7 +39,7 @@ public class DifficultySelectionScreen {
             difficulties.setMaximized(true);
         });
 
-        // Create medium sudoku puzzle and send to solving screen
+        // Create medium sudoku puzzle and send to solving screen when medium button is clicked.
         mediumButton.setOnAction(e -> {
             int[][] mediumPuzzle = SudokuBoardGenerator.generateMediumBoardPuzzle();
             SolvingScreen solvingScreen = new SolvingScreen();
@@ -47,20 +47,20 @@ public class DifficultySelectionScreen {
             difficulties.setMaximized(true);
         });
 
-        // Call previous screen (home screen) when back button is clicked
+        // Call previous screen (home screen) when back button is clicked.
         backButton.setOnAction(e -> {
             HomeScreen homeScreen = new HomeScreen();
             difficulties.setScene(homeScreen.getScene(difficulties));
             difficulties.setMaximized(true);
         });
 
-        // Disable hard button for now
+        // Disable hard button for now.
         hardButton.setDisable(true);
         Label note = new Label("*Hard mode coming soon*");
         note.setStyle("-fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-text-fill: red; -fx-font-weight: bold");
 
 
-        // Set layouts and return screen
+        // Set layouts and return screen.
         HBox hard = new HBox(10, hardButton, note);
         hard.setAlignment(Pos.CENTER);
         hard.setPadding(new Insets(0, 0, 0, 180));
@@ -74,7 +74,7 @@ public class DifficultySelectionScreen {
 
         return new Scene(root, 800, 600);
     }
-
+    // Stylizes buttons using general features.
     private void styleButton(Button button) {
         button.setStyle("-fx-font-size: 18px;" +
                 "-fx-font-family: 'Verdana';" +

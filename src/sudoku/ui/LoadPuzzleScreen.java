@@ -12,19 +12,20 @@ import javafx.stage.Stage;
 import sudoku.logic.SudokuBoard;
 import sudoku.logic.SudokuBoardGenerator;
 
+// This class holds the needed methods for showing and working the load puzzle screen of the application.
 public class LoadPuzzleScreen {
-
+    // Initialize cells on board.
     private Pane[][] cells = new Pane[9][9];
     private Pane selectedCell = null;
-
+    // Show load puzzle screen.
     public Scene getScene(Stage load) {
 
-        // Create title of screen
+        // Create title of screen.
         Label title = new Label("Input Your Puzzle Below");
         title.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-text-fill: #000000;");
         title.setAlignment(Pos.CENTER);
 
-        // Create back button to go back to home screen
+        // Create back button to go back to home screen.
         Button backButton = new Button("Back");
 
         backButton.setStyle("-fx-font-size: 14; -fx-background-color: transparent; -fx-text-fill: #00264d; -fx-font-weight: bold; -fx-font-family: 'Courier New';");
@@ -35,7 +36,7 @@ public class LoadPuzzleScreen {
             load.setScene(new HomeScreen().getScene(load));
         });
 
-        // Create submit button and stylize
+        // Create submit button and stylize.
         Button submitButton = new Button("Submit");
         submitButton.setPrefSize(110, 40);
 
@@ -51,12 +52,13 @@ public class LoadPuzzleScreen {
         );
 
 
-        // Create grid pane for the sudoku board, including size and style
+        // Create grid pane for the sudoku board, including size and style.
         GridPane board = UIComponents.createSudokuBoard();
 
-        // Create cells for the 81 sudoku squares on the board, setting size and style
+        // Create cells for the 81 sudoku squares on the board, setting size and style.
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
+                // Create Pane for cell and stylize.
                 Pane cell = new Pane();
                 cell.setPrefSize(60, 60);
                 cell.setStyle("-fx-border-color: black;" +
@@ -66,42 +68,41 @@ public class LoadPuzzleScreen {
 
                 cells[row][column] = cell;
 
-                // Map coordinates to each cell
+                // Map coordinates to each cell.
                 cell.setUserData(new int[]{row, column});
                 final int finalRow = row;
                 final int finalColumn = column;
 
-                // Wire highlight features to cells
+                // Wire highlight features to cells.
                 cell.setOnMouseClicked(e -> {
                     if (selectedCell != null) {
-                        // Gather coordinates of previous highlighted cell
+                        // Gather coordinates of previous highlighted cell.
                         int[] previousCoordinates = (int[]) selectedCell.getUserData();
                         int previousRow = previousCoordinates[0];
                         int previousColumn = previousCoordinates[1];
 
-                        // Unhighlight previous selected cell and set it back to normal using coordinates
+                        // Unhighlight previous selected cell and set it back to normal using coordinates.
                         selectedCell.setStyle("-fx-border-color: black;" +
                                 "-fx-border-width: " + UIComponents.getBorderWidth(previousRow, previousColumn) + ";" +
                                 "-fx-font-size: 20;" + "-fx-background-color: white; ");
                     }
 
-                    // Highlight current selected cell
+                    // Highlight currently selected cell.
                     selectedCell = cell;
                     cell.setStyle("-fx-border-color: black;" +
                             "-fx-border-width: " + UIComponents.getBorderWidth(finalRow, finalColumn) + ";" +
                             "-fx-font-size: 20;" + "-fx-background-color: #00BFFF; ");
                 });
-
                 board.add(cell, column, row);
             }
         }
 
-        // Create grid pane for number pad
+        // Create grid pane for number pad.
         GridPane numberPad = UIComponents.createNumberPad();
 
-        // Create buttons for numbers 1-9 and for number pad
+        // Create buttons for numbers 1-9 and for number pad.
         for (int num = 1; num <= 9; num++) {
-            // Create button
+            // Create button and stylize.
             Button numButton = new Button(String.valueOf(num));
             numButton.setPrefSize(60, 60);
 
@@ -133,11 +134,11 @@ public class LoadPuzzleScreen {
             ));
 
 
-            // Determine coordinates for number pad
+            // Determine coordinates for number pad.
             int row = (num <= 5) ? 0 : 1;
             int column = (num <= 5) ? (num - 1) : (num - 6);
 
-            // Input number into highlighted square when button is clicked
+            // Input number into highlighted square when button is clicked.
             numButton.setOnAction(e -> {
                 if (selectedCell != null) {
                     selectedCell.getChildren().clear();
@@ -150,11 +151,10 @@ public class LoadPuzzleScreen {
                     selectedCell.getChildren().add(numInput);
                 }
             });
-
             numberPad.add(numButton, column, row);
         }
 
-        // Create clear button and add to last slot in number pad
+        // Create clear button, stylize, and add to last slot in number pad.
         Button clearButton = new Button("X");
         clearButton.setPrefSize(60, 60);
 
@@ -187,20 +187,17 @@ public class LoadPuzzleScreen {
                         "-fx-background-radius: 3;"
         ));
 
-
-        // Delete number from highlighted square when clicked
+        // Delete number from highlighted square when clicked.
         clearButton.setOnAction(e -> {
             if (selectedCell != null) {
                 selectedCell.getChildren().clear();
             }
         });
-
         numberPad.add(clearButton, 4, 1);
 
-        // When submit button is clicked, validate puzzle and move to solving screen if valid
+        // When submit button is clicked, validate puzzle and move to solving screen if valid.
         submitButton.setOnAction(e -> {
-
-            // Convert inputted puzzle into 2d array
+            // Convert inputted puzzle into 2d array.
             int[][] userPuzzle = new int[9][9];
             for (int i = 0; i < cells.length; i++) {
                 for (int j = 0; j < cells.length; j++) {
@@ -213,15 +210,15 @@ public class LoadPuzzleScreen {
                 }
             }
 
-            // Create sudoku board class to validate
+            // Create sudoku board class to validate puzzle.
             SudokuBoard userBoard = new SudokuBoard(userPuzzle);
 
-            // Prepare potential error message
+            // Prepare potential error message.
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Invalid Puzzle");
             errorAlert.setHeaderText(null);
 
-            // Check if the board breaks any sudoku rules and is solvable. If not, send to solving screen
+            // Check if the board breaks any sudoku rules and is solvable. If not, send to solving screen.
             if (!userBoard.isCorrect()) {
                 errorAlert.setContentText("The puzzle is not valid. Check for duplicate numbers in the same row, " +
                         "column, or subgrid.");
@@ -237,14 +234,15 @@ public class LoadPuzzleScreen {
             }
         });
 
-        // Create layout containing only board and submit button in order to control centralization and padding
+        // Create layout containing only board and submit button in order to control centralization and padding.
         HBox middleLayout = new HBox(20, board, submitButton);
         middleLayout.setAlignment(Pos.CENTER);
         middleLayout.setPadding(new Insets(0, 0, 0, 100));
 
-        // Set whole layout and return screen
+        // Set whole layout and return screen.
         VBox coreLayout = new VBox(20, title, middleLayout, numberPad);
         coreLayout.setAlignment(Pos.CENTER);
+
         BorderPane overallLayout = new BorderPane();
         overallLayout.setTop(backButton);
         overallLayout.setCenter(coreLayout);

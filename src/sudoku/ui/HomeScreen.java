@@ -12,11 +12,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+// This class holds the needed methods for showing and working the home screen of the application.
 public class HomeScreen {
-
+    // Show home screen.
     public Scene getScene(Stage home) {
 
-        // Create title label and stylize
+        // Create title label and stylize.
         Label titleLabel = new Label("Sudoku");
         titleLabel.setStyle(
                 "-fx-font-size: 48px;" +
@@ -25,7 +26,7 @@ public class HomeScreen {
                         "-fx-font-family: 'Segoe UI';"
         );
 
-        // Create subheading label and stylize
+        // Create subheading label and stylize.
         Label subheadingLabel = new Label("Choose Your Puzzle:");
         subheadingLabel.setStyle(
                 "-fx-font-size: 20px;" +
@@ -34,7 +35,7 @@ public class HomeScreen {
                         "-fx-font-family: 'Arial';"
         );
 
-        // Create buttons for solving different puzzles and stylize
+        // Create buttons for solving different puzzles and stylize each one.
         Button loadButton = new Button("Solve Custom Puzzle");
         Button generateButton = new Button("Solve Random Puzzle");
         Button exitButton = new Button("Close Application");
@@ -53,7 +54,7 @@ public class HomeScreen {
         generateButton.setStyle(buttonStyle);
         exitButton.setStyle(buttonStyle);
 
-        // Call difficulty screen when generate button is clicked
+        // Call difficulty screen when generate button is clicked.
         generateButton.setOnAction(e -> {
             DifficultySelectionScreen difficultySelectionScreen = new DifficultySelectionScreen();
             home.setScene(difficultySelectionScreen.getScene(home));
@@ -65,7 +66,7 @@ public class HomeScreen {
             home.setHeight(screenBounds.getHeight());
         });
 
-        // Call load screen when load button is clicked
+        // Call load screen when load button is clicked.
         loadButton.setOnAction(e -> {
             LoadPuzzleScreen loadPuzzleScreen = new LoadPuzzleScreen();
             home.setScene(loadPuzzleScreen.getScene(home));
@@ -77,17 +78,17 @@ public class HomeScreen {
             home.setHeight(screenBounds.getHeight());
         });
 
-        // Quit application when exit button is clicked
+        // Quit application when exit button is clicked.
         exitButton.setOnAction(e -> {
             Platform.exit();
         });
 
-        // Set button layout
+        // Set button layout.
         HBox buttonBox = new HBox(40, loadButton, generateButton);
         buttonBox.setAlignment(Pos.CENTER);
         HBox quitBox = new HBox(0, exitButton);
 
-        // Set main layout and return scene
+        // Set main layout and return scene.
         VBox layout = new VBox(40, titleLabel, subheadingLabel, buttonBox, exitButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(60));
