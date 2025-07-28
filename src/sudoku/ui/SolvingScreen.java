@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -14,13 +13,10 @@ import javafx.stage.Stage;
 import sudoku.logic.SudokuCandidatesManager;
 import sudoku.logic.SudokuSolverApplication;
 import sudoku.logic.SudokuSolverTechniques;
-import sudoku.logic.SudokuSolverTechniquesHelpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.Callable;
 
 // This class holds the needed methods for showing and working the solving screen of the application.
 public class SolvingScreen {
@@ -74,7 +70,7 @@ public class SolvingScreen {
                     Label fixedCell = new Label(String.valueOf(value));
                     fixedCell.setStyle("-fx-font-size: 30;");
 
-                    // Put in wrapper to maintain board borders and sylize.
+                    // Put in wrapper to maintain board borders and stylize.
                     StackPane wrapper = new StackPane(fixedCell);
                     wrapper.setPrefSize(60, 60);
                     wrapper.setStyle(
@@ -375,7 +371,7 @@ public class SolvingScreen {
             if (!text.isEmpty()) {
                 try {
                     cellValue = Integer.parseInt(text);
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException ignored) {
 
                 }
             }
@@ -442,7 +438,7 @@ public class SolvingScreen {
         }
     }
 
-    // Reveal correct value inside of empty cell.
+    // Reveal correct value of empty cell.
     private void revealCell(Pane cell, int[][] solvedBoard, GridPane numPad, Stage solve, String difficulty) {
         // Only reveal editable cells.
         if (findCellType(cell).equals("free")) {
@@ -625,9 +621,7 @@ public class SolvingScreen {
         checkCell.setStyle(style);
 
         // Check cell correctness when clicked.
-        checkCell.setOnAction(e -> {
-            checkCell(selectedCell, solvedPuzzle);
-        });
+        checkCell.setOnAction(e -> checkCell(selectedCell, solvedPuzzle));
 
         checkButtons.getChildren().add(checkCell);
 
@@ -637,9 +631,7 @@ public class SolvingScreen {
         checkPuzzle.setStyle(style);
 
         // Check puzzle correctness when clicked.
-        checkPuzzle.setOnAction(e -> {
-            checkPuzzle(solvedPuzzle);
-        });
+        checkPuzzle.setOnAction(e -> checkPuzzle(solvedPuzzle));
 
         // Update layout.
         checkButtons.getChildren().add(checkPuzzle);
@@ -656,9 +648,7 @@ public class SolvingScreen {
         revealCell.setStyle(style);
 
         // Reveal selected cell when clicked.
-        revealCell.setOnAction(e -> {
-            revealCell(selectedCell, solvedPuzzle, pad, solve, difficulty);
-        });
+        revealCell.setOnAction(e -> revealCell(selectedCell, solvedPuzzle, pad, solve, difficulty));
 
         revealButtons.getChildren().add(revealCell);
 
@@ -668,9 +658,7 @@ public class SolvingScreen {
         revealPuzzle.setStyle(style);
 
         // Reveal puzzle when clicked.
-        revealPuzzle.setOnAction(e -> {
-            revealPuzzle(solvedPuzzle, pad, solve, difficulty);
-        });
+        revealPuzzle.setOnAction(e -> revealPuzzle(solvedPuzzle, pad, solve, difficulty));
 
         // Update layout.
         revealButtons.getChildren().add(revealPuzzle);
@@ -687,9 +675,7 @@ public class SolvingScreen {
         hintButton.setStyle(style);
 
         // Show next easy cell to solve when clicked.
-        hintButton.setOnAction(e -> {
-            hint();
-        });
+        hintButton.setOnAction(e -> hint());
 
         utilityButtons.getChildren().add(hintButton);
 
@@ -835,17 +821,13 @@ public class SolvingScreen {
     // Returns the coordinates of given cell.
     private int[] findCellCoordinates(Pane cell) {
         Map<String, Object> dataMap = (Map<String, Object>) cell.getUserData();
-        int[] coords = (int[]) dataMap.get("coords");
-
-        return coords;
+        return (int[]) dataMap.get("coords");
     }
 
     // Returns String of given cell type.
     private String findCellType(Pane cell) {
         Map<String, Object> dataMap = (Map<String, Object>) cell.getUserData();
-        String type = (String) dataMap.get("type");
-
-        return type;
+        return (String) dataMap.get("type");
     }
 
     // Returns solved version of given board by using simple recursion, starting at given coordinates.
@@ -1099,9 +1081,7 @@ public class SolvingScreen {
         customButton.setStyle(buttonStyle);
 
         // Close application when clicked.
-        quitButton.setOnAction(e -> {
-            Platform.exit();
-        });
+        quitButton.setOnAction(e -> Platform.exit());
         quitButton.setStyle(buttonStyle);
 
         // Set layout.

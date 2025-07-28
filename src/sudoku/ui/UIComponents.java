@@ -1,11 +1,7 @@
 package sudoku.ui;
 
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
 // This class holds the needed methods for creating UI components for multiple screens.
 public class UIComponents {
@@ -51,4 +47,3 @@ public class UIComponents {
         return true;
     }
 }
-

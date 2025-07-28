@@ -86,4 +86,3 @@ public class DifficultySelectionScreen {
                 "-fx-cursor: hand;");
     }
 }
-

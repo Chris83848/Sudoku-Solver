@@ -79,14 +79,11 @@ public class HomeScreen {
         });
 
         // Quit application when exit button is clicked.
-        exitButton.setOnAction(e -> {
-            Platform.exit();
-        });
+        exitButton.setOnAction(e -> Platform.exit());
 
         // Set button layout.
         HBox buttonBox = new HBox(40, loadButton, generateButton);
         buttonBox.setAlignment(Pos.CENTER);
-        HBox quitBox = new HBox(0, exitButton);
 
         // Set main layout and return scene.
         VBox layout = new VBox(40, titleLabel, subheadingLabel, buttonBox, exitButton);

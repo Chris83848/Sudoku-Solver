@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import sudoku.logic.SudokuBoard;
-import sudoku.logic.SudokuBoardGenerator;
 
 // This class holds the needed methods for showing and working the load puzzle screen of the application.
 public class LoadPuzzleScreen {
@@ -32,9 +31,7 @@ public class LoadPuzzleScreen {
         backButton.setOnMouseEntered(e -> backButton.setUnderline(true));
         backButton.setOnMouseExited(e -> backButton.setUnderline(false));
 
-        backButton.setOnAction(e -> {
-            load.setScene(new HomeScreen().getScene(load));
-        });
+        backButton.setOnAction(e -> load.setScene(new HomeScreen().getScene(load)));
 
         // Create submit button and stylize.
         Button submitButton = new Button("Submit");
