@@ -1,13 +1,15 @@
 package sudoku.logic;
 import java.util.ArrayList;
 
+// This class manages methods used to create and update cell candidates in a sudoku puzzle.
 public class SudokuCandidatesManager {
 
-    // Finds the candidate lists of each empty cell in the sudoku Board and puts them in their own data structure
+    // Finds the candidate lists of each empty cell in the sudoku Board and puts them in their own data structure.
     public static void findCandidates(int[][] sudokuBoard, ArrayList<Integer>[][] candidates) {
         for (int i = 0; i < sudokuBoard.length; i++) {
             for (int j = 0; j < sudokuBoard.length; j++) {
                 if (sudokuBoard[i][j] == 0) {
+                    // Tests each possible value that can go in cell. If no immediate error arises, it is a candidate.
                     for (int candidate = 1; candidate <= 9; candidate++) {
                         sudokuBoard[i][j] = candidate;
                         if (!SudokuSolverApplication.checkBoardError(sudokuBoard, i, j)) {
@@ -21,7 +23,7 @@ public class SudokuCandidatesManager {
     }
 
 
-    // Updates the candidates in each empty cell in the given grid, row, and column
+    // Updates the candidates in each empty cell in the given grid, row, and column.
     public static void updateCandidates(int[][] sudokuBoard, ArrayList<Integer>[][] candidates, int i, int j) {
         candidates[i][j].clear();
         updateRow(sudokuBoard, candidates, i);
@@ -30,14 +32,16 @@ public class SudokuCandidatesManager {
     }
 
 
-    // Updates the candidates in each empty cell in the given row
+    // Updates the candidates in each empty cell in the given row.
     public static void updateRow(int[][] sudokuBoard, ArrayList<Integer>[][] candidates, int i) {
         int length = sudokuBoard.length;
 
+        // Loop through selected row.
         for (int j = 0; j < length; j++) {
             if (sudokuBoard[i][j] == 0) {
                 for (int candidate: candidates[i][j]) {
                     sudokuBoard[i][j] = candidate;
+                    // Removes candidate if it is no longer eligible of housing a cell due to error.
                     if (SudokuSolverApplication.checkBoardError(sudokuBoard, i, j)) {
                         candidates[i][j].remove(Integer.valueOf(candidate));
                         break;
@@ -49,14 +53,16 @@ public class SudokuCandidatesManager {
     }
 
 
-    // Updates the candidates in each empty cell in the given column
+    // Updates the candidates in each empty cell in the given column.
     public static void updateColumn(int[][] sudokuBoard, ArrayList<Integer>[][] candidates, int j) {
         int length = sudokuBoard.length;
 
+        // Loop through selected column.
         for (int i = 0; i < length; i++) {
             if (sudokuBoard[i][j] == 0) {
                 for (int candidate: candidates[i][j]) {
                     sudokuBoard[i][j] = candidate;
+                    // Removes candidate if it is no longer eligible of housing a cell due to error.
                     if (SudokuSolverApplication.checkBoardError(sudokuBoard, i, j)) {
                         candidates[i][j].remove(Integer.valueOf(candidate));
                         break;
@@ -68,18 +74,20 @@ public class SudokuCandidatesManager {
     }
 
 
-    // Updates the candidates in each empty cell in the given grid
+    // Updates the candidates in each empty cell in the given grid.
     public static void updateGrid(int[][] sudokuBoard, ArrayList<Integer>[][] candidates, int i, int j) {
         int rowStart, columnStart;
-
+        // Locate grid to loop through.
         rowStart = SudokuUtils.identifyGridCoordinate(i);
         columnStart = SudokuUtils.identifyGridCoordinate(j);
 
+        // Loop through selected grid.
         for (int row = rowStart; row <= rowStart + 2; row++) {
             for (int column = columnStart; column <= columnStart + 2; column++) {
                 if (sudokuBoard[row][column] == 0) {
                     for (int candidate: candidates[row][column]) {
                         sudokuBoard[row][column] = candidate;
+                        // Removes candidate if it is no longer eligible of housing a cell due to error.
                         if (SudokuSolverApplication.checkBoardError(sudokuBoard, row, column)) {
                             candidates[row][column].remove(Integer.valueOf(candidate));
                             break;

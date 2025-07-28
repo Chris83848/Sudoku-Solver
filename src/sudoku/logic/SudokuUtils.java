@@ -2,15 +2,16 @@ package sudoku.logic;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// This class holds utility methods for solving sudoku puzzles humanly.
 public class SudokuUtils {
 
-    // Identifies starting row/column of grid of given row
+    // Returns starting row/column of grid of given row/column.
     public static int identifyGridCoordinate(int coordinate) {
         return coordinate / 3 * 3;
     }
 
 
-    // Checks if all values in Array List are equal
+    // Returns whether all values in given Array List are equal.
     public static boolean allEqual(ArrayList<Integer> list) {
         int compare = list.get(0);
         for (int num : list) {
@@ -22,7 +23,7 @@ public class SudokuUtils {
     }
 
 
-    // Returns whether given array contains given value
+    // Returns whether given array contains given value.
     public static boolean arrayContainsNum(int[] array, int x) {
         for (int num : array) {
             if (num == x) {
@@ -33,7 +34,7 @@ public class SudokuUtils {
     }
 
 
-    // Returns whether given arrayList contains given array
+    // Returns whether given arrayList contains given array.
     public static boolean arrayListContainsArray(ArrayList<int[]> arrayList, int[] array) {
         for (int[] currentArray : arrayList) {
             if (Arrays.equals(currentArray, array)) {
@@ -43,7 +44,7 @@ public class SudokuUtils {
         return false;
     }
 
-    //This method prints out the given sudoku board whether it is solved or not.
+    // Converts given sudoku board to String and prints it out.
     public static void printBoard(int[][] board) {
         System.out.println("\n-------------------------");
         for (int i = 0; i < board.length; i++) {

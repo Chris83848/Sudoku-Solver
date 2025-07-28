@@ -1,14 +1,16 @@
 package sudoku.logic;
 
+// This class holds a sudoku board and its related methods.
 public class SudokuBoard {
     private static int[][] board;
     private String difficulty;
 
+    // Constructor
     public SudokuBoard(int[][] unsolvedBoard) {
         board = unsolvedBoard;
     }
 
-
+    // Returns whether board is a valid and solvable puzzle
     public static boolean isValid() {
         if (isSolvable() && isCorrect()) {
             return true;
@@ -17,10 +19,12 @@ public class SudokuBoard {
         }
     }
 
+    // Returns whether board is a solvable puzzle
     public static boolean isSolvable() {
         return (SudokuSolverApplication.boardHumanlySolvable(board, 3) && SudokuBoardGenerator.isUnique(board));
     }
 
+    // Returns whether board is a valid puzzle
     public static boolean isCorrect() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -34,7 +38,7 @@ public class SudokuBoard {
         return true;
     }
 
-
+    // Converts board to a string output
     @Override
     public String toString() {
         String result = "";
@@ -57,6 +61,7 @@ public class SudokuBoard {
         return result;
     }
 
+    // Returns board
     public int[][] getBoard() {
         return board;
     }
