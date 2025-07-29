@@ -795,23 +795,25 @@ public class SolvingScreen {
 
                 isSolving = false;
 
-                // Reactivate buttons.
-                checkCell.setDisable(false);
-                checkPuzzle.setDisable(false);
-                revealCell.setDisable(false);
-                revealPuzzle.setDisable(false);
-                resetPuzzle.setDisable(false);
-                hintButton.setDisable(false);
-                recursionButton.setDisable(false);
-                humanButton.setDisable(false);
-                back.setDisable(false);
-                for (Node node : pad.getChildren()) {
-                    if (node instanceof Button) {
-                        node.setDisable(false);  // or false to re-enable
+                Platform.runLater(() -> {
+                    // Reactivate buttons.
+                    checkCell.setDisable(false);
+                    checkPuzzle.setDisable(false);
+                    revealCell.setDisable(false);
+                    revealPuzzle.setDisable(false);
+                    resetPuzzle.setDisable(false);
+                    hintButton.setDisable(false);
+                    recursionButton.setDisable(false);
+                    humanButton.setDisable(false);
+                    back.setDisable(false);
+                    for (Node node : pad.getChildren()) {
+                        if (node instanceof Button) {
+                            node.setDisable(false);  // or false to re-enable
+                        }
                     }
-                }
-                // Trigger completion popup.
-                Completion(solve, difficulty, pad);
+                    // Trigger completion popup.
+                    Completion(solve, difficulty, pad);
+                });
             }).start();
         });
         // Set layout.
