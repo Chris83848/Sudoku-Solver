@@ -93,7 +93,7 @@ public class SudokuCandidatesManager {
                             break;
                         }
                     }
-                    // Reset cell.
+                    // Reset the cell.
                     sudokuBoard[row][column] = 0;
                 }
             }
