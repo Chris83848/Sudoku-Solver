@@ -717,6 +717,9 @@ public class SolvingScreen {
         buttonColumn.getChildren().add(solvingButtons);
 
         // Solves by recursion when clicked.
+        // Runs on a background thread (not the JavaFX Application Thread) since placeUpdateNumber/sleep would
+        // otherwise freeze the UI. Every visual update is routed back through Platform.runLater() in
+        // updateBoard(), which is the standard, correct pattern for a long-running task with live UI feedback.
         recursionButton.setOnAction(e -> {
 
             isSolving = true;
@@ -871,6 +874,8 @@ public class SolvingScreen {
     }
 
     // Solves board using human approach using hint and revealCell methods, taking a second between each placement.
+    // This reuses the same hint() logic that powers the manual Hint button. The "watch it solve like a human"
+    // animation is the hint-then-reveal cycle run in a loop, not a separate solving implementation.
     private void human(int[][] solvedPuzzle, GridPane numPad, Stage solve, String difficulty) {
         while (!checkCompletion(solvedPuzzle)) {
             hint();

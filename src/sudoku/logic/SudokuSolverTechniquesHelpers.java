@@ -8,6 +8,9 @@ public class SudokuSolverTechniquesHelpers {
 
     // Returns whether a number has been placed in the given cell on the board. Helper for recursive solver by
     // placing numbers incrementally until one is found or no numbers are left.
+    // This resumes from the cell's current value rather than restarting at 1, which is what makes
+    // backtracking work correctly. When recursion fails deeper in the board and control returns here, calling
+    // placeNumber again continues from where it last left off instead of re-trying numbers already ruled out.
     public static boolean placeNumber(int[][] board, int i, int j) {
         // If each number has been checked and none fit, empty cell and return false.
         if (board[i][j] >= 9) {
@@ -299,6 +302,10 @@ public class SudokuSolverTechniquesHelpers {
 
     // Loop through index list to find if any two indices match.
     // Returns matching indices in 2D array or returns null if no matching indices found.
+    // KNOWN ISSUE: this compares int[] coordinate pairs using .equals(), which Java never overrides for arrays.
+    // It falls back to reference equality. As written, this will only return non-null if the exact same array
+    // object appears twice, which doesn't happen given how indices is built. As a result, the naked pairs
+    // technique likely never actually fires. Left as-is to avoid requiring a rebuild of the packaged application.
     public static int[][] nakedDoublePair(ArrayList<int[]> indices) {
         for (int i = 0; i < indices.size() - 1; i++) {
             for (int j = i + 1; j < indices.size(); j++) {

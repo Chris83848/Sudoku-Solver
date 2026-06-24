@@ -2,6 +2,13 @@ package sudoku.logic;
 import java.util.ArrayList;
 
 // This class holds the high level methods for solving sudoku puzzles humanly and checking for errors within them.
+//
+// The human-solving approach is built as a difficulty cascade: solveEasy() tries the simplest techniques first
+// (naked singles -> hidden singles -> pointing pairs) and only falls through to the next technique if the
+// previous one made no progress. solveMedium() always attempts solveEasy() first before trying its own
+// techniques, and solveHard() does the same with solveMedium(). This mirrors how a human actually solves.
+// You don't reach for an advanced technique if a simple one is available. It also means a puzzle's difficulty
+// is defined entirely by which technique tier is required to fully solve it, not by an arbitrary empty cell count.
 public class SudokuSolverApplication {
     // Returns solved board using recursion.
     public static int[][] solveRecursively(int[][] sudokuBoard) {
@@ -9,6 +16,8 @@ public class SudokuSolverApplication {
     }
 
     // Returns solved board, or as much of it as possible, using human techniques.
+    // The outer do-while loop restarts the cascade from the simplest technique after every single
+    // change, since placing one number can immediately unlock a different cell elsewhere on the board.
     public static int[][] solveBoardHumanly(int[][] sudokuBoard, int difficultyLevel) {
         int length = sudokuBoard.length;
         int[][] currentBoard = new int[9][9];

@@ -4,6 +4,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // This class houses the methods needed to create different and distinct sudoku puzzles of varying difficulties.
+//
+// Puzzle generation works in two phases: first, generateRandomSolvedBoard() builds a complete, randomized,
+// valid solution. Then cells are removed in symmetric pairs (rotational, reflective, etc.) while re-validating
+// after every removal that the puzzle still has a unique solution (isUnique()) AND is still solvable using only
+// the technique tier allowed at the target difficulty (SudokuSolverApplication.boardHumanlySolvable()). This
+// means the generator and the human-solver share the same definition of difficulty. A puzzle is "Easy"
+// because the easy-tier cascade can fully solve it, not because of a fixed number of removed cells.
 public class SudokuBoardGenerator {
 
     // This method generates a unique, original, sudoku board puzzle of easy difficulty
@@ -204,6 +211,10 @@ public class SudokuBoardGenerator {
 
 
     // Returns whether given puzzle has a unique solution
+    // This counts solutions via exhaustive backtracking. When a complete solution is found,
+    // it's deliberately erased (sudokuBoard[i][j] = 0) so the search continues as if nothing was found, looking
+    // for a second solution. The moment more than one solution is detected, the search exits immediately since
+    // there's no need to keep counting once uniqueness is already disproven.
     public static boolean isUnique(int[][] sudokuBoard) {
         // Create indicator of uniqueness
         int[] numSolutions = {0};
