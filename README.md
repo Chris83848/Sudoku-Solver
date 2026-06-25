@@ -49,9 +49,12 @@ Don't want a generated puzzle? Build your own. Click cells and enter values manu
 
 ## Walkthrough
 
-| Home | Difficulty Selection | Solving Screen                                        | Completion |
-|---|---|-------------------------------------------------------|---|
-| ![Home screen](assets/home-screen.png) | ![Difficulty selection](assets/difficulty-selection-screen.png) | ![Solving screen](assets/checking-solving-screen.png) | ![End screen](assets/end-screen.png) |
+|                                                       | |
+|-------------------------------------------------------|---|
+| ![Home screen](assets/home-screen.png)                | ![Difficulty selection](assets/difficulty-selection-screen.png) |
+| **Home**                                              | **Difficulty Selection** |
+| ![Solving screen](assets/checking-solving-screen.png) | ![End screen](assets/end-screen.png) |
+| **Solving Screen**                                    | **Completion** |
 
 
 ## Architecture
