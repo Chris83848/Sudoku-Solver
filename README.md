@@ -69,6 +69,19 @@ sudoku/
 
 The UI layer never implements solving logic directly. Every screen calls into `sudoku.logic` for board validation, solving, and generation, keeping presentation and logic fully decoupled.
 
+## How to Run
+
+**Windows only.**
+
+1. Download `FinalSudokuApp.zip` from the [latest release](https://github.com/Chris83848/Sudoku-Solver/releases/latest).
+2. Locate the downloaded zip (likely in your Downloads folder) and extract it fully. Right-click the file and choose **Extract All**, then follow the prompts.
+3. Open the extracted folder.
+4. Double-click `SudokuApp.exe` to launch the app.
+
+The app must be run from inside its extracted folder because it depends on supporting files bundled alongside the `.exe` and will not launch correctly if moved out on its own.
+
+If Windows shows a warning about running an app from an unknown publisher, click **More info**, then **Run anyway**. This is expected for unsigned indie applications and does not indicate a problem with the app itself.
+
 ## Known Limitations
 
 - **Hard difficulty** is scaffolded but not yet implemented in the puzzle generator. The option is visibly disabled in the app rather than hidden.
