@@ -73,7 +73,7 @@ The UI layer never implements solving logic directly. Every screen calls into `s
 
 **Windows only.**
 
-1. Download `FinalSudokuApp.zip` from the [latest release](https://github.com/Chris83848/Sudoku-Solver/releases/latest).
+1. Download `SudokuAppFinal.zip` from the [latest release](https://github.com/Chris83848/Sudoku-Solver/releases/latest).
 2. Locate the downloaded zip (likely in your Downloads folder) and extract it fully. Right-click the file and choose **Extract All**, then follow the prompts.
 3. Open the extracted folder.
 4. Double-click `SudokuApp.exe` to launch the app.
